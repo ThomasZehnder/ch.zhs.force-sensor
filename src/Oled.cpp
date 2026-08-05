@@ -18,6 +18,11 @@ SSD1306Wire display(0x3c, SDA, SCL); // ADDRESS, SDA, SCL  -  SDA and SCL usuall
 //"table line 1"
 #define X_OFFSET_1 54
 
+// force history graph, lower half of the 128x64 display
+#define GRAPH_TOP 34
+#define GRAPH_BOTTOM 63
+#define GRAPH_HEIGHT (GRAPH_BOTTOM - GRAPH_TOP)
+
 #define DEMO_DURATION 3000
 typedef void (*Demo)(void);
 
@@ -123,6 +128,53 @@ void oledShowNetworks()
     }
 }
 
+// draws the last FORCE_HISTORY_SIZE force values as a line, autoscaled to their own min/max,
+// newest sample anchored at the right edge so the graph scrolls in from the right
+void drawForceGraph()
+{
+    int historyCount = Assembly.force.historyFull ? FORCE_HISTORY_SIZE : Assembly.force.historyIndex;
+    if (historyCount < 2)
+    {
+        return;
+    }
+    int historyStart = Assembly.force.historyFull ? Assembly.force.historyIndex : 0;
+
+    float minValue = Assembly.force.history[historyStart];
+    float maxValue = minValue;
+    for (int i = 1; i < historyCount; i++)
+    {
+        float v = Assembly.force.history[(historyStart + i) % FORCE_HISTORY_SIZE];
+        if (v < minValue)
+        {
+            minValue = v;
+        }
+        if (v > maxValue)
+        {
+            maxValue = v;
+        }
+    }
+    float range = maxValue - minValue;
+
+    float dx = 127.0f / (FORCE_HISTORY_SIZE - 1);
+    int prevX = -1, prevY = -1;
+    for (int i = 0; i < historyCount; i++)
+    {
+        float v = Assembly.force.history[(historyStart + i) % FORCE_HISTORY_SIZE];
+        int age = historyCount - 1 - i; // 0 = newest sample
+        int x = (int)(127.0f - age * dx + 0.5f);
+        int y = (range > 0.0f)
+                    ? GRAPH_BOTTOM - (int)((v - minValue) / range * GRAPH_HEIGHT + 0.5f)
+                    : (GRAPH_TOP + GRAPH_HEIGHT / 2);
+
+        if (prevX >= 0)
+        {
+            display.drawLine(prevX, prevY, x, y);
+        }
+        prevX = x;
+        prevY = y;
+    }
+}
+
 void oledLoop()
 {
 
@@ -178,6 +230,8 @@ void oledLoop()
         display.setTextAlignment(TEXT_ALIGN_LEFT);
         display.setFont(ArialMT_Plain_16);
         display.drawString(0, 0 + Y_OFFSET + 0, "Force: " + String(Assembly.force.value) + "N ");
+
+        drawForceGraph();
     }
 
     //  write the buffer to the display
