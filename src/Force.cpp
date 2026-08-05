@@ -28,6 +28,8 @@ void clForce::tare()
     if (sensor.wait_ready_timeout(1000))
     {
         sensor.tare();
+        Serial.print("Force.tare --> done, offset: ");
+        Serial.println(sensor.get_offset());
     }
     else
     {
