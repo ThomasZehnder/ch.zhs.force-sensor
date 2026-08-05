@@ -45,10 +45,6 @@ int httpRssi(void)
   return WiFi.RSSI();
 }
 
-String httpLocalIP(void)
-{
-  return WiFi.localIP().toString();
-}
 
 void scanNetworks()
 {
