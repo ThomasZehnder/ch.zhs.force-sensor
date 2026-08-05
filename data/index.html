@@ -43,6 +43,9 @@
                     //execude page initializizer
                     //console.log("loaded url: ", url);
                     if (url.startsWith('a-home')) {
+                        startTimerFn(loadAssemblyTable, 10000);
+                    }
+                    else if (url.startsWith('a-diagnose')) {
                         startTimer(['/assembly'], ['assemblyId'], 10000);
                     }
                     else if (url.startsWith('a-config')) {
@@ -133,18 +136,19 @@
 
         //Fetch cyclic
         var timerId = null;
-        var fetchUrl;
-        var elementId;
+        var refreshFn = null; // current cyclic action, so changeRefreshRate can restart it at a new interval
+
+        function startTimerFn(fn, time) {
+            stopTimer();
+            refreshFn = fn;
+            timerId = setInterval(fn, time);
+        }
 
         function startTimer(url, id, time) {
-            stopTimer();
-            fetchUrl = url;
-            elementId = id;
             var i = 0;
-            timerId = setInterval(() => {
-                i = (i + 1) % fetchUrl.length;
-                //console.log(typeof(fetchUrl[i]), fetchUrl.length);
-                loadElement(fetchUrl[i], elementId[i]);
+            startTimerFn(() => {
+                i = (i + 1) % url.length;
+                loadElement(url[i], id[i]);
             }, time);
         }
 
@@ -157,9 +161,26 @@
         function changeRefreshRate(time) {
             console.log(time);
             stopTimer();
-            if (time > 0) {
-                startTimer(fetchUrl, elementId, time);
+            if (time > 0 && refreshFn) {
+                timerId = setInterval(refreshFn, time);
             }
+        }
+
+        //Assembly status table (force/offset/scale/state) on the home page
+        function loadAssemblyTable() {
+            fetch('/assembly')
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    document.getElementById('forceId').textContent = data.force;
+                    document.getElementById('offsetId').textContent = data.offset;
+                    document.getElementById('scaleId').textContent = data.scale;
+                    document.getElementById('stateTextId').textContent = data.stateText;
+                })
+                .catch(function (error) {
+                    console.error("Error loading assembly:", error);
+                });
         }
 
         function showSpinner() {

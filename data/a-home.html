@@ -1,12 +1,22 @@
 <h2> Force Sensor</h2>
-<ul>
-    <li>
-        <a href="/json">GET test JSON</a>
-    </li>
-    <li>
-        <a href="/assembly">GET assembly state as JSON</a>
-    </li>
-</ul>
+
 
 <h2>Assembly Status</h2>
-<pre id="assemblyId"><embed type="application/json" src="assembly" width="400" height="150"> </pre>
+<table id="assemblyId">
+    <tr>
+        <th>Force [N]</th>
+        <td id="forceId">-</td>
+    </tr>
+    <tr>
+        <th>Offset</th>
+        <td id="offsetId">-</td>
+    </tr>
+    <tr>
+        <th>Scale</th>
+        <td id="scaleId">-</td>
+    </tr>
+    <tr>
+        <th>State</th>
+        <td id="stateTextId">-</td>
+    </tr>
+</table>
