@@ -6,14 +6,11 @@
 
 #define CPP_VERSION "V1.00.00 "
 
-
 struct tstCfgWifi
 {
     char ssid[32];
     char pw[32];
 };
-
-
 
 #define NBRCONNECTIONS 3
 struct tstCfg
@@ -31,6 +28,17 @@ struct tstKey
     int pressedCounter;
 };
 
+struct tstForce
+{
+    float value; // measured force in Newton
+};
+
+enum enMainState
+{
+    StateSetup,
+    StateMesure
+};
+
 class clAssembly
 {
 public:
@@ -45,6 +53,10 @@ public:
     struct tstKey keys[3];
 
     tstCfg cfg;
+
+    tstForce force;
+
+    enMainState state = StateSetup;
 
 public:
     void setup();

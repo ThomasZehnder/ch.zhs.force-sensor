@@ -257,28 +257,7 @@ void drawLedScreen()
     display.display();
 }
 
-// void drawPrgScreen(String lines[3])
-void drawPrgScreen()
-{
-    display.clear();
 
-    // Draw a line horizontally
-    display.drawHorizontalLine(0, Y_OFFSET - 1, 128); // last yellow
-
-    // Draw actual MQTT status top right
-    display.setFont(ArialMT_Plain_10);
-    display.setTextAlignment(TEXT_ALIGN_RIGHT);
-    display.drawString(128, 0, "Prg Mode"); // top right
-
-    // Draw ip
-    display.setTextAlignment(TEXT_ALIGN_LEFT);
-    display.drawString(0, 0, Assembly.localIp); // top right
-
-    display.setFont(ArialMT_Plain_10);
-    display.drawString(0, 0 + Y_OFFSET, "keys: [0] " + String(Assembly.keys[0].pressed) + " [1] " + String(Assembly.keys[1].pressed) + " [2] " + String(Assembly.keys[2].pressed));
-
-    display.display();
-}
 
 void drawCo2Screen()
 {
@@ -334,15 +313,28 @@ void drawTempScreen()
 void oledLoop()
 {
 
-    drawStartScreen();
+    //drawStartScreen();
 
-    //
+    display.clear();
+
+    // Draw a line horizontally
+    display.drawHorizontalLine(0, Y_OFFSET - 1, 128); // last yellow
+
+        // Draw ip
+    display.setTextAlignment(TEXT_ALIGN_LEFT);
+    display.drawString(0, 0, Assembly.localIp); // top right
+
+    // Draw actual MQTT status top right
     display.setFont(ArialMT_Plain_10);
     display.setTextAlignment(TEXT_ALIGN_RIGHT);
-    display.drawString(128, 54, String(millis() / 100 % 10)); // bottom right
-    //  The coordinates define the right end of the text
-    // display.setTextAlignment(TEXT_ALIGN_RIGHT);
-    // display.drawString(128, 0, String(millis()));   //top right
+    display.drawString(128, 0, "Measurement"); // top right);   //top right
+
+    display.drawString(0, 0 + Y_OFFSET, "Force: " + String(Assembly.force.value) + "N ");
+    
+
+
+
+
     //  write the buffer to the display
     display.display();
 

@@ -8,14 +8,12 @@
 
 #include "Global.h"
 
-
 void setup()
 {
     Serial.begin(115200);
     Serial.println();
 
     Assembly.setup(); // read config file
-
 
     oledSetup();
 
@@ -24,14 +22,9 @@ void setup()
 
     wifiSetup();
 
-
-
     httpServerSetup(); // will not longer block until WLAN connected
 
-
-
     hwSetup();
-
 }
 
 void loop()
@@ -39,22 +32,23 @@ void loop()
 
     hwLoop();
 
-
+    if (hwSecoundTick())
+    {
+        if (Assembly.state == StateSetup)
+        {
+            Assembly.state = StateMesure;
+        };
+    }
 
     // 50ms tick
     if (hwCentiSecoundTick())
     {
         oledLoop();
 
-
         pollKeyPressed();
-
     }
-
 
     wifiLoop();
 
     httpServerLoop();
-
-
 }
