@@ -37,10 +37,6 @@ void hwSetup(void)
 {
     pinMode(TOGGLE_LED_PIN, OUTPUT);
 
-    // for stromfresser
-    // pinMode(D8, OUTPUT);
-    // digitalWrite(D8, 1);
-
     Assembly.keys[0].pin = KEY1_PIN;
     Assembly.keys[1].pin = KEY2_PIN;
 

@@ -18,17 +18,17 @@ see https://randomnerdtutorials.com/vs-code-platformio-ide-esp32-esp8266-arduino
     //D1 = SDL for OLED display
     //D2 = SDA for OLED display
 
-    //D3 = WS2812 data line (LEDS need 5V, signal only 3.3V works)
+    
+    
 
+    
+    #define KEY1_PIN D3
     //D4 is reserved for build In led -> show http activity
-    
-    // D7 used for IR presence sensor
-    
-#define KEY1_PIN D7
-#define KEY2_PIN D8
+    #define KEY2_PIN D5
 
-#define FORCE_DOUT_PIN D6
-#define FORCE_SCK_PIN D5
+    #define FORCE_DOUT_PIN D6
+    #define FORCE_SCK_PIN D7
+    // D8 dont use, Boot feature on it
 
 
 ## Use PlatformIO

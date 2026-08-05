@@ -6,11 +6,12 @@
 
 // D4 is reserved for build In led -> show http activity
 
-#define KEY1_PIN D7
-#define KEY2_PIN D8
+#define KEY1_PIN D3
+//D4 build in LED
+#define KEY2_PIN D5
 
 #define FORCE_DOUT_PIN D6
-#define FORCE_SCK_PIN D5
+#define FORCE_SCK_PIN D7
 
 
 void hwSetup(void);
