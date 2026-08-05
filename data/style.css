@@ -61,6 +61,15 @@ pre {
   font-family: 'Courier New', monospace;
 }
 
+table#assemblyId {
+  font-size: 2em;
+  margin: 20px;
+}
+
+td#offsetId{
+   font-size: 4em;
+}
+
 /* || header layout */
 
 nav,

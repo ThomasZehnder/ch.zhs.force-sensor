@@ -43,10 +43,10 @@
                     //execude page initializizer
                     //console.log("loaded url: ", url);
                     if (url.startsWith('a-home')) {
-                        startTimerFn(loadAssemblyTable, 10000);
+                        startTimerFn(loadAssemblyTable, 500);
                     }
                     else if (url.startsWith('a-diagnose')) {
-                        startTimer(['/assembly'], ['assemblyId'], 10000);
+                        startTimer(['/assembly'], ['assemblyId'], 500);
                     }
                     else if (url.startsWith('a-config')) {
                         //console.log("Load Configpage: ", param)
@@ -141,6 +141,7 @@
         function startTimerFn(fn, time) {
             stopTimer();
             refreshFn = fn;
+            fn(); // fetch immediately instead of waiting for the first interval tick
             timerId = setInterval(fn, time);
         }
 
