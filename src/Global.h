@@ -68,6 +68,8 @@ public:
 
     tstForce force;
 
+    bool scanNetworks = false; // configurable via config_main.json, SCANNETWORKS
+
     enMainState state = StateSetup;
     unsigned long stateStartMillis = 0; // millis() timestamp when the current state was entered
 

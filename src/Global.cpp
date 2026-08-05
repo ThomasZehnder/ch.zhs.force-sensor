@@ -54,10 +54,12 @@ void clAssembly::setupDevice()
 
         strncpy(deviceId, doc["DEVICEID"] | DEVICEID, sizeof(deviceId));
         cfg.accessPointEnabled = doc["ACCESSPOINT"];
+        scanNetworks = doc["SCANNETWORKS"] | false;
 
 
         Serial.println(String("Assembly.setupDevice --> deviceid: ") + deviceId);
         Serial.println(String("Assembly.setupDevice --> accesspoint_enable: ") + cfg.accessPointEnabled);
+        Serial.println(String("Assembly.setupDevice --> scanNetworks: ") + scanNetworks);
         file.close(); // Close the file again
     }
     else
@@ -65,6 +67,7 @@ void clAssembly::setupDevice()
         Serial.println(String("Assembly.setupDevice --> error: NO ") + filename + " found, works with default defines.");
         strcpy(deviceId, DEVICEID);
         cfg.accessPointEnabled = true;
+        scanNetworks = false;
     }
 }
 

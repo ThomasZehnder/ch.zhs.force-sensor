@@ -18,9 +18,11 @@ void setup()
 
     oledSetup();
 
-    // scanNetworks(); // call before httpSetup, show result in serial out
-    oledShowNetworks(); // show result on OLED
-
+    if (Assembly.scanNetworks)
+    {
+        scanNetworks();     // call before httpSetup, show result in serial out
+        oledShowNetworks(); // show result on OLED
+    }
     wifiSetup();
 
     httpServerSetup(); // will not longer block until WLAN connected
@@ -34,8 +36,6 @@ void loop()
 {
 
     hwLoop();
-
-    
 
     if (hwSecoundTick())
     {
@@ -55,7 +55,6 @@ void loop()
     // 50ms tick
     if (hwCentiSecoundTick())
     {
-        
 
         pollKeyPressed();
         Assembly.processKeys();

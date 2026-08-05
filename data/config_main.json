@@ -1,4 +1,5 @@
 {
     "DEVICEID": "forcesensor_avm_",
-    "ACCESSPOINT": true
+    "ACCESSPOINT": true,
+    "SCANNETWORKS": false
 }
