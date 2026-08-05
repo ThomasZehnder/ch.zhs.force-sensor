@@ -64,10 +64,12 @@ pre {
 table#assemblyId {
   font-size: 2em;
   margin: 20px;
+  width: calc(100% - 40px);
+  table-layout: fixed;
 }
 
 td#forceId{
-   font-size: 3em;
+   font-size: 2em;
    padding: 10px;
 }
 
