@@ -173,6 +173,12 @@ void drawForceGraph()
         prevX = x;
         prevY = y;
     }
+
+    // label the y-axis extremes (max top-left, min bottom-left), same idea as the web chart
+    display.setFont(ArialMT_Plain_10);
+    display.setTextAlignment(TEXT_ALIGN_LEFT);
+    display.drawString(0, GRAPH_TOP, String(maxValue, 1));
+    display.drawString(0, GRAPH_BOTTOM - 9, String(minValue, 1));
 }
 
 void oledLoop()
