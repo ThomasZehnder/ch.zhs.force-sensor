@@ -58,8 +58,3 @@ void clForce::calibrate(float knownForceNewton)
     Serial.println(calibrationFactor);
 }
 
-void clForce::setCalibrationFactor(float factor)
-{
-    calibrationFactor = factor;
-    Assembly.force.sensor.set_scale(calibrationFactor);
-}

@@ -11,7 +11,6 @@ public:
 
     void tare();
     void calibrate(float knownForceNewton);
-    void setCalibrationFactor(float factor);
 
 private:
     float calibrationFactor = 1.0; // counts per Newton, needs calibration against a known reference force

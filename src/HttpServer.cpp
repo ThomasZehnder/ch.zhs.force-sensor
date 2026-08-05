@@ -335,11 +335,16 @@ void httpServerSetup(void)
   if (Assembly.cfg.accessPointEnabled || wifiConnectError)
   {
     Serial.println("HttpSetup --> Setting the AP Mode with SSID, NO Password...");
+
+    // SSID = DEVICEID + last two hex digits of the AP MAC address, to tell devices apart
+    String apMac = WiFi.softAPmacAddress();
+    String apSsid = String(Assembly.deviceId) + apMac.substring(apMac.length() - 2);
+
     // Setting the AP Mode with SSID, Password, and Max Connection Limit
-    if (WiFi.softAP(Assembly.deviceId, "", 1, false, 1) == true)
+    if (WiFi.softAP(apSsid.c_str(), "", 1, false, 1) == true)
     {
       Serial.print("Access Point is Creadted with MAC ADDDR: ");
-      Serial.println(WiFi.softAPmacAddress());
+      Serial.println(apMac);
       Serial.print("Access Point IP: ");
       Serial.println(WiFi.softAPIP());
       Serial.print("getFlashChipId: ");
