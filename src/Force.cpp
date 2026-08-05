@@ -28,6 +28,12 @@ void clForce::loop()
     }
 }
 
+void clForce::clearHistory()
+{
+    Assembly.force.historyIndex = 0;
+    Assembly.force.historyFull = false;
+}
+
 void clForce::tare()
 {
     // wait_ready() (called internally by tare()/read()) blocks forever with no timeout,
@@ -35,6 +41,7 @@ void clForce::tare()
     if (Assembly.force.sensor.wait_ready_timeout(1000))
     {
         Assembly.force.sensor.tare();
+        clearHistory();
         Serial.print("Force.tare --> done, offset: ");
         Serial.println(Assembly.force.sensor.get_offset());
     }
@@ -60,6 +67,7 @@ void clForce::calibrate(float knownForceNewton)
     long rawAverage = Assembly.force.sensor.read_average(10);
     calibrationFactor = (rawAverage - Assembly.force.sensor.get_offset()) / knownForceNewton;
     Assembly.force.sensor.set_scale(calibrationFactor);
+    clearHistory();
 
     Serial.print("Force.calibrate --> new calibration factor: ");
     Serial.println(calibrationFactor);
