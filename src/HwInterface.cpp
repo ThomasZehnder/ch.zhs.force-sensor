@@ -43,10 +43,9 @@ void hwSetup(void)
 
     Assembly.keys[0].pin = KEY1_PIN;
     Assembly.keys[1].pin = KEY2_PIN;
-    Assembly.keys[2].pin = KEY3_PIN;
 
     int i = 0;
-    for (i = 0; i < 3; i++)
+    for (i = 0; i < NBRKEYS; i++)
     {
         pinMode(Assembly.keys[i].pin, INPUT_PULLUP);
     }
@@ -96,7 +95,7 @@ int keyPressedCounter(int keyNumber)
 void pollKeyPressed(void)
 {
     int i = 0;
-    for (i = 0; i < 3; i++)
+    for (i = 0; i < NBRKEYS; i++)
     {
         bool pressed = digitalRead(Assembly.keys[i].pin);
         if ((pressed == false) && (pressed != Assembly.keys[i].pressed))

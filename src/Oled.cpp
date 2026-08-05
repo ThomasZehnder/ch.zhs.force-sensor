@@ -113,7 +113,7 @@ void drawProgressScreen()
     display.drawProgressBar(0, 14 + Y_OFFSET, 120, 10, progress);
 
     // Draw Assembly State
-    //display.drawString(0, Y_OFFSET + 36, "Assembly State: " + Assembly.getProcessState());
+    // display.drawString(0, Y_OFFSET + 36, "Assembly State: " + Assembly.getProcessState());
 }
 
 void drawWifiOkScreen()
@@ -144,7 +144,7 @@ void drawWifiOkScreen()
     display.setTextAlignment(TEXT_ALIGN_LEFT);
     // Draw Assembly State
     display.drawString(0, Y_OFFSET + 36, "Assembly State: ");
-    //display.drawString(X_OFFSET_1 + 24, Y_OFFSET + 36, Assembly.getProcessState());
+    // display.drawString(X_OFFSET_1 + 24, Y_OFFSET + 36, Assembly.getProcessState());
 }
 void oledShowNetworks()
 {
@@ -210,22 +210,20 @@ void drawAssemblyInfo()
     display.drawString(0, Y_OFFSET, String("Wifi On: ") + String(Assembly.wifiConnected));
 
     // Job Name
-    //display.drawString(0, Y_OFFSET + 12, String("Job: ") + Assembly.job);
+    // display.drawString(0, Y_OFFSET + 12, String("Job: ") + Assembly.job);
     // display.drawString(X_OFFSET_1, Y_OFFSET + 12, String(Assembly.job));
 
     // Draw Key Counter
-    String s("Key [1,2,3]: ");
+    String s("Key [1,2]: ");
     s += String(Assembly.keys[0].pressedCounter);
     s += " ";
     s += String(Assembly.keys[1].pressedCounter);
-    s += " ";
-    s += String(Assembly.keys[2].pressedCounter);
 
     display.drawString(0, Y_OFFSET + 24, s);
 
     // Draw Key Counter
     display.drawString(0, Y_OFFSET + 36, "Assembly State: ");
-    //display.drawString(X_OFFSET_1 + 24, Y_OFFSET + 36, Assembly.getProcessState());
+    // display.drawString(X_OFFSET_1 + 24, Y_OFFSET + 36, Assembly.getProcessState());
 }
 
 void drawAirSensorScreen()
@@ -256,8 +254,6 @@ void drawLedScreen()
 
     display.display();
 }
-
-
 
 void drawCo2Screen()
 {
@@ -313,27 +309,25 @@ void drawTempScreen()
 void oledLoop()
 {
 
-    //drawStartScreen();
+    // drawStartScreen();
 
     display.clear();
 
     // Draw a line horizontally
     display.drawHorizontalLine(0, Y_OFFSET - 1, 128); // last yellow
 
-        // Draw ip
+    // Draw ip
+    display.setFont(ArialMT_Plain_10);
     display.setTextAlignment(TEXT_ALIGN_LEFT);
     display.drawString(0, 0, Assembly.localIp); // top right
 
     // Draw actual MQTT status top right
-    display.setFont(ArialMT_Plain_10);
     display.setTextAlignment(TEXT_ALIGN_RIGHT);
-    display.drawString(128, 0, "Measurement"); // top right);   //top right
+    display.drawString(128, 0, "Force"); // top right);   //top right
 
-    display.drawString(0, 0 + Y_OFFSET, "Force: " + String(Assembly.force.value) + "N ");
-    
-
-
-
+    display.setTextAlignment(TEXT_ALIGN_LEFT);
+    display.setFont(ArialMT_Plain_16);
+    display.drawString(0, 0 + Y_OFFSET + 0, "Force: " + String(Assembly.force.value) + "N ");
 
     //  write the buffer to the display
     display.display();

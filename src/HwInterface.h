@@ -7,17 +7,12 @@
 
 // D4 is reserved for build In led -> show http activity
 
-//KEY1 moved to D5 to avoid fast overload for IR detection
-//KEY3 moved to D7 to used for IR detection
-#define KEY1_PIN D5
-#define KEY2_PIN D6
-#define KEY3_PIN D7
+#define KEY1_PIN D7
+#define KEY2_PIN D8
 
-//GPIO15/D8 for flash & boot don't pull high
-#define LDR_PIN  D8
-#define IR_PRESENCE_PIN  D7
+#define FORCE_DOUT_PIN D5
+#define FORCE_SCK_PIN D6
 
-#define NOISE_PIN A0
 
 void hwSetup(void);
 void hwLoop(void);

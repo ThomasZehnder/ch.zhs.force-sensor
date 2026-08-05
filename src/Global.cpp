@@ -170,8 +170,4 @@ void clAssembly::processKeys()
     {
         //finishProcess();
     }
-    else if (keys[2].edge)
-    {
-        //abortProcess();
-    }
 }

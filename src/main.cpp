@@ -2,6 +2,7 @@
 
 #include "HttpServer.h"
 
+#include "Force.h"
 #include "HwInterface.h"
 #include "Oled.h"
 #include "Wifi.h"
@@ -25,12 +26,16 @@ void setup()
     httpServerSetup(); // will not longer block until WLAN connected
 
     hwSetup();
+
+    Force.setup();
 }
 
 void loop()
 {
 
     hwLoop();
+
+    
 
     if (hwSecoundTick())
     {
@@ -43,6 +48,7 @@ void loop()
     // 50ms tick
     if (hwCentiSecoundTick())
     {
+        Force.loop();
         oledLoop();
 
         pollKeyPressed();

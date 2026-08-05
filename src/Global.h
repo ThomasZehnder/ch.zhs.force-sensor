@@ -20,6 +20,7 @@ struct tstCfg
     byte index = 0; // index used for http and mqtt sebd to cloud, depends on found WIFI Network
 };
 
+#define NBRKEYS 2
 struct tstKey
 {
     int pin;
@@ -50,7 +51,7 @@ public:
     String localIp;
     String ssid;
 
-    struct tstKey keys[3];
+    struct tstKey keys[NBRKEYS];
 
     tstCfg cfg;
 

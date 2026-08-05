@@ -147,14 +147,15 @@ void assemblyJson()
   doc["rssi"] = httpRssi();
 
   doc["wifiConnected"] = Assembly.wifiConnected;
+  doc["status"] = Assembly.state;
+
+  doc["force"] = Assembly.force.value;
 
   doc["key_1"] = Assembly.keys[0].pressed;
   doc["key_2"] = Assembly.keys[1].pressed;
-  doc["key_3"] = Assembly.keys[2].pressed;
 
   doc["key_cnt_1"] = Assembly.keys[0].pressedCounter;
   doc["key_cnt_2"] = Assembly.keys[1].pressedCounter;
-  doc["key_cnt_3"] = Assembly.keys[2].pressedCounter;
 
   doc["cfg_index"] = Assembly.cfg.index;
 
@@ -279,8 +280,7 @@ void _getKeys()
   // build manualy
   output += "{";
   output += "\"key_1\":" + String(Assembly.keys[0].pressed) + ",";
-  output += "\"key_2\":" + String(Assembly.keys[1].pressed) + ",";
-  output += "\"key_3\":" + String(Assembly.keys[2].pressed);
+  output += "\"key_2\":" + String(Assembly.keys[1].pressed);
   output += "}";
 
   setAllowCors();
