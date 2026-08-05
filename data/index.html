@@ -209,6 +209,19 @@
                 }
             });
             ctx.stroke();
+
+            // label the y-axis extremes (max top-left, min bottom-left), with a backing
+            // box so the text stays readable where the line crosses it
+            function drawYLabel(text, y) {
+                ctx.font = '10px sans-serif';
+                const textWidth = ctx.measureText(text).width;
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
+                ctx.fillRect(0, y, textWidth + 4, 12);
+                ctx.fillStyle = '#000';
+                ctx.fillText(text, 2, y + 9);
+            }
+            drawYLabel(max.toFixed(1) + " N", 0);
+            drawYLabel(min.toFixed(1) + " N", h - 12);
         }
 
         function showSpinner() {
