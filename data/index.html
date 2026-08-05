@@ -152,7 +152,12 @@
         }
 
         //Assembly status table (force/offset/scale/state) on the home page
+        let assemblyTableSemaphore = true;
         function loadAssemblyTable() {
+            if (!assemblyTableSemaphore) {
+                return; // last request not answered yet, skip this tick
+            }
+            assemblyTableSemaphore = false;
             fetch('/assembly')
                 .then(function (response) {
                     return response.json();
@@ -162,9 +167,11 @@
                     document.getElementById('offsetId').textContent = data.offset;
                     document.getElementById('scaleId').textContent = data.scale;
                     document.getElementById('stateTextId').textContent = data.stateText;
+                    assemblyTableSemaphore = true;
                 })
                 .catch(function (error) {
                     console.error("Error loading assembly:", error);
+                    assemblyTableSemaphore = true;
                 });
         }
 
