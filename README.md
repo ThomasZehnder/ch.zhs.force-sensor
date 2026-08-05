@@ -69,7 +69,8 @@ ACCESSPOINT (bool): force to switch on accesspoint even WIFI is connected.
 
     {
         "DEVICEID": "force_sensor",
-        "ACCESSPOINT": true
+        "ACCESSPOINT": true,
+        "SCANNETWORK" : false
     }
 
 ## configure Wifi and Webserver

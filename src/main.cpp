@@ -18,7 +18,7 @@ void setup()
 
     oledSetup();
 
-    if (Assembly.scanNetworks)
+    if (Assembly.cfg.scanNetworks)
     {
         scanNetworks();     // call before httpSetup, show result in serial out
         oledShowNetworks(); // show result on OLED

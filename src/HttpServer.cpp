@@ -153,6 +153,7 @@ void assemblyJson()
   doc["hostname"] = WiFi.hostname();
   doc["deviceId"] = Assembly.deviceId;
   doc["accesspoint_enable"] = Assembly.cfg.accessPointEnabled;
+  doc["scannetwork_enable"] = Assembly.cfg.scanNetworks;
   doc["localIp"] = Assembly.localIp;
   doc["ssid"] = Assembly.ssid;
   doc["compiledate"] = Assembly.compileDate;

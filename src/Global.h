@@ -18,6 +18,7 @@ struct tstCfg
 {
     tstCfgWifi wifi[NBRCONNECTIONS];
     bool accessPointEnabled = true;
+    bool scanNetworks = false; // configurable via config_main.json, SCANNETWORKS
     byte index = 0; // index used for http and mqtt sebd to cloud, depends on found WIFI Network
 };
 
@@ -67,8 +68,6 @@ public:
     tstCfg cfg;
 
     tstForce force;
-
-    bool scanNetworks = false; // configurable via config_main.json, SCANNETWORKS
 
     enMainState state = StateSetup;
     unsigned long stateStartMillis = 0; // millis() timestamp when the current state was entered
