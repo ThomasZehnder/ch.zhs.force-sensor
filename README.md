@@ -29,10 +29,6 @@ see https://randomnerdtutorials.com/vs-code-platformio-ide-esp32-esp8266-arduino
     //D1 = SDL for OLED display
     //D2 = SDA for OLED display
 
-    
-    
-
-    
     #define KEY1_PIN D3
     //D4 is reserved for build In led -> show http activity
     #define KEY2_PIN D5
@@ -81,7 +77,7 @@ ACCESSPOINT (bool): force to switch on accesspoint even WIFI is connected.
     {
         "DEVICEID": "force_sensor",
         "ACCESSPOINT": true,
-        "SCANNETWORK" : false
+        "SCANNETWORKS" : false
     }
 
 ## configure Wifi and Webserver
