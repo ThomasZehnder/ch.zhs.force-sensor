@@ -6,6 +6,7 @@
 
 #include "Global.h"
 #include "credentials.h"
+#include "Force.h"
 
 // global object definition
 clAssembly Assembly;
@@ -164,10 +165,10 @@ void clAssembly::processKeys()
 {
     if (keys[0].edge)
     {
-        //startProcess();
+        Force.tare(); // Key 0 --> tare to zero
     }
     else if (keys[1].edge)
     {
-        //finishProcess();
+        Force.calibrate(1.0f * EARTH_GRAVITY_MPS2); // Key 1 --> calibrate against a 1kg reference weight
     }
 }

@@ -3,6 +3,8 @@
 
 #include <HX711.h>
 
+#define EARTH_GRAVITY_MPS2 9.80665f
+
 class clForce
 {
 public:
@@ -10,6 +12,7 @@ public:
     void loop();
 
     void tare();
+    void calibrate(float knownForceNewton);
     void setCalibrationFactor(float factor);
 
 private:

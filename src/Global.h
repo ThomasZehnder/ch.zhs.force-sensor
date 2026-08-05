@@ -37,7 +37,7 @@ struct tstForce
 enum enMainState
 {
     StateSetup,
-    StateMesure
+    StateMeasure
 };
 
 class clAssembly

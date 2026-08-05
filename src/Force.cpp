@@ -35,6 +35,27 @@ void clForce::tare()
     }
 }
 
+void clForce::calibrate(float knownForceNewton)
+{
+    if (knownForceNewton == 0)
+    {
+        return;
+    }
+
+    if (!sensor.wait_ready_timeout(1000))
+    {
+        Serial.println("Force.calibrate --> HX711 not responding, calibration skipped");
+        return;
+    }
+
+    long rawAverage = sensor.read_average(10);
+    calibrationFactor = (rawAverage - sensor.get_offset()) / knownForceNewton;
+    sensor.set_scale(calibrationFactor);
+
+    Serial.print("Force.calibrate --> new calibration factor: ");
+    Serial.println(calibrationFactor);
+}
+
 void clForce::setCalibrationFactor(float factor)
 {
     calibrationFactor = factor;

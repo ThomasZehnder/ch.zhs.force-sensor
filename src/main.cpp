@@ -41,7 +41,7 @@ void loop()
     {
         if (Assembly.state == StateSetup)
         {
-            Assembly.state = StateMesure;
+            Assembly.state = StateMeasure;
         };
     }
 
@@ -52,6 +52,7 @@ void loop()
         oledLoop();
 
         pollKeyPressed();
+        Assembly.processKeys();
     }
 
     wifiLoop();
