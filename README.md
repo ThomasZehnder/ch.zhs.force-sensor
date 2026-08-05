@@ -24,16 +24,12 @@ see https://randomnerdtutorials.com/vs-code-platformio-ide-esp32-esp8266-arduino
     
     // D7 used for IR presence sensor
     
-//KEY1 moved to D5 to avoid fast overload for IR detection
-//KEY3 moved to D7 to used for IR detection
-#define KEY1_PIN D6
-#define KEY2_PIN D5
-#define KEY3_PIN D7
+#define KEY1_PIN D7
+#define KEY2_PIN D8
 
-#define IR_PRESENCE_PIN D7
-#define LDR_PIN D8
+#define FORCE_DOUT_PIN D6
+#define FORCE_SCK_PIN D5
 
-#define TEMP_PIN D5
 
 ## Use PlatformIO
 In VSCode see elements in the buttom left corner to transfer projekt to arduino board.
@@ -96,19 +92,4 @@ http://192.168.1.157/reboot
 ### File Directory Arduino by REST Call
 http://192.168.1.157/dir
 
-## MQTT Connection
-Try public internet accessible MQTT broker 
-
-
-        "NAME": "public.mqtthq.com",
-        "HOST": "52.13.116.147",
-        "PORT": 1883,
-        "LOGIN": "",
-        "PASSWORD": ""
-
-        "NAME": "public:public@public.cloud.shiftr.io 34.77.13.55",
-        "HOST": "34.77.13.55",
-        "PORT": 1883,
-        "LOGIN": "public",
-        "PASSWORD": "public"
 

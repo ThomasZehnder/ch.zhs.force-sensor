@@ -23,7 +23,16 @@ void clForce::loop()
 
 void clForce::tare()
 {
-    sensor.tare();
+    // wait_ready() (called internally by tare()/read()) blocks forever with no timeout,
+    // which trips the watchdog if the HX711 is not wired up / not powered yet
+    if (sensor.wait_ready_timeout(1000))
+    {
+        sensor.tare();
+    }
+    else
+    {
+        Serial.println("Force.tare --> HX711 not responding, tare skipped");
+    }
 }
 
 void clForce::setCalibrationFactor(float factor)

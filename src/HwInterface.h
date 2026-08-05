@@ -3,15 +3,14 @@
 // D1 = SDL for OLED display
 // D2 = SDA for OLED display
 
-// D3 = WS2812 data line (LEDS need 5V, signal only 3.3V works)
 
 // D4 is reserved for build In led -> show http activity
 
 #define KEY1_PIN D7
 #define KEY2_PIN D8
 
-#define FORCE_DOUT_PIN D5
-#define FORCE_SCK_PIN D6
+#define FORCE_DOUT_PIN D6
+#define FORCE_SCK_PIN D5
 
 
 void hwSetup(void);
