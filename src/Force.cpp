@@ -8,16 +8,16 @@ clForce Force;
 
 void clForce::setup()
 {
-    sensor.begin(FORCE_DOUT_PIN, FORCE_SCK_PIN);
-    sensor.set_scale(calibrationFactor);
+    Assembly.force.sensor.begin(FORCE_DOUT_PIN, FORCE_SCK_PIN);
+    Assembly.force.sensor.set_scale(calibrationFactor);
     tare();
 }
 
 void clForce::loop()
 {
-    if (sensor.is_ready())
+    if (Assembly.force.sensor.is_ready())
     {
-        Assembly.force.value = sensor.get_units(1);
+        Assembly.force.value = Assembly.force.sensor.get_units(1);
     }
 }
 
@@ -25,11 +25,11 @@ void clForce::tare()
 {
     // wait_ready() (called internally by tare()/read()) blocks forever with no timeout,
     // which trips the watchdog if the HX711 is not wired up / not powered yet
-    if (sensor.wait_ready_timeout(1000))
+    if (Assembly.force.sensor.wait_ready_timeout(1000))
     {
-        sensor.tare();
+        Assembly.force.sensor.tare();
         Serial.print("Force.tare --> done, offset: ");
-        Serial.println(sensor.get_offset());
+        Serial.println(Assembly.force.sensor.get_offset());
     }
     else
     {
@@ -44,15 +44,15 @@ void clForce::calibrate(float knownForceNewton)
         return;
     }
 
-    if (!sensor.wait_ready_timeout(1000))
+    if (!Assembly.force.sensor.wait_ready_timeout(1000))
     {
         Serial.println("Force.calibrate --> HX711 not responding, calibration skipped");
         return;
     }
 
-    long rawAverage = sensor.read_average(10);
-    calibrationFactor = (rawAverage - sensor.get_offset()) / knownForceNewton;
-    sensor.set_scale(calibrationFactor);
+    long rawAverage = Assembly.force.sensor.read_average(10);
+    calibrationFactor = (rawAverage - Assembly.force.sensor.get_offset()) / knownForceNewton;
+    Assembly.force.sensor.set_scale(calibrationFactor);
 
     Serial.print("Force.calibrate --> new calibration factor: ");
     Serial.println(calibrationFactor);
@@ -61,5 +61,5 @@ void clForce::calibrate(float knownForceNewton)
 void clForce::setCalibrationFactor(float factor)
 {
     calibrationFactor = factor;
-    sensor.set_scale(calibrationFactor);
+    Assembly.force.sensor.set_scale(calibrationFactor);
 }

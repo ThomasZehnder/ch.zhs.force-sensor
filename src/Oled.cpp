@@ -331,7 +331,7 @@ void oledLoop()
         display.drawString(0, 0 + Y_OFFSET, "Remove load from sensor!");
 
         display.setFont(ArialMT_Plain_16);
-        display.drawString(0, 0 + Y_OFFSET + 14, "Tare in " + String(Assembly.tareCountdown) + "s");
+        display.drawString(0, 0 + Y_OFFSET + 14, "TARA 0 ...");
     }
     else
     {

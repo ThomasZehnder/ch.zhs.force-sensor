@@ -166,6 +166,8 @@ void assemblyJson()
   doc["stateText"] = state2Text(Assembly.state);
 
   doc["force"] = Assembly.force.value;
+  doc["offset"] = Assembly.force.sensor.get_offset();
+  doc["scale"] = Assembly.force.sensor.get_scale();
 
   doc["key_1"] = Assembly.keys[0].pressed;
   doc["key_2"] = Assembly.keys[1].pressed;

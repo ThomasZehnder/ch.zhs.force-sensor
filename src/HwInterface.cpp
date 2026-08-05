@@ -56,6 +56,7 @@ void hwLoop(void)
     // secound tick
     if ((long)(currentMillis - preSecoundMillis) > 0)
     {
+        preSecoundMillis = currentMillis + SECOUND_INTERVAL;
         secoundTick = true;
 
         // set the LED with the ledState of the variable:

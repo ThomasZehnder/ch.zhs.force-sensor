@@ -3,6 +3,7 @@
 // global object definition
 #include <Arduino.h>
 #include <ArduinoJson.h>
+#include <HX711.h>
 
 #define CPP_VERSION "V1.00.00 "
 
@@ -32,6 +33,7 @@ struct tstKey
 struct tstForce
 {
     float value; // measured force in Newton
+    HX711 sensor;
 };
 
 enum enMainState

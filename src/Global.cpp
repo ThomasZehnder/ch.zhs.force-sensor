@@ -165,9 +165,9 @@ void clAssembly::processKeys()
 {
     if (keys[0].edge)
     {
-        // Key 0 --> start tare-zero countdown, actual tare fires in main loop after it elapses
+        // Key 0 --> show "tare now" for 1s, actual tare fires in main loop after it elapses
         state = StateTare;
-        tareCountdown = 2;
+        tareCountdown = 1;
     }
     else if (keys[1].edge)
     {
