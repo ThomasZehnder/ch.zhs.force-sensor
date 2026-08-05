@@ -321,13 +321,28 @@ void oledLoop()
     display.setTextAlignment(TEXT_ALIGN_LEFT);
     display.drawString(0, 0, Assembly.localIp); // top right
 
-    // Draw actual MQTT status top right
-    display.setTextAlignment(TEXT_ALIGN_RIGHT);
-    display.drawString(128, 0, "Force"); // top right);   //top right
+    if (Assembly.state == StateTare)
+    {
+        display.setTextAlignment(TEXT_ALIGN_RIGHT);
+        display.drawString(128, 0, "Tare");
 
-    display.setTextAlignment(TEXT_ALIGN_LEFT);
-    display.setFont(ArialMT_Plain_16);
-    display.drawString(0, 0 + Y_OFFSET + 0, "Force: " + String(Assembly.force.value) + "N ");
+        display.setTextAlignment(TEXT_ALIGN_LEFT);
+        display.setFont(ArialMT_Plain_10);
+        display.drawString(0, 0 + Y_OFFSET, "Remove load from sensor!");
+
+        display.setFont(ArialMT_Plain_16);
+        display.drawString(0, 0 + Y_OFFSET + 14, "Tare in " + String(Assembly.tareCountdown) + "s");
+    }
+    else
+    {
+        // Draw actual MQTT status top right
+        display.setTextAlignment(TEXT_ALIGN_RIGHT);
+        display.drawString(128, 0, "Force"); // top right);   //top right
+
+        display.setTextAlignment(TEXT_ALIGN_LEFT);
+        display.setFont(ArialMT_Plain_16);
+        display.drawString(0, 0 + Y_OFFSET + 0, "Force: " + String(Assembly.force.value) + "N ");
+    }
 
     //  write the buffer to the display
     display.display();

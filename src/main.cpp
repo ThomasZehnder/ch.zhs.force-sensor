@@ -42,7 +42,19 @@ void loop()
         if (Assembly.state == StateSetup)
         {
             Assembly.state = StateMeasure;
-        };
+        }
+        else if (Assembly.state == StateTare)
+        {
+            if (Assembly.tareCountdown > 0)
+            {
+                Assembly.tareCountdown--;
+            }
+            if (Assembly.tareCountdown == 0)
+            {
+                Force.tare();
+                Assembly.state = StateMeasure;
+            }
+        }
     }
 
     // 50ms tick

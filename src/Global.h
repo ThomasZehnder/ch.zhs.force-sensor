@@ -37,7 +37,8 @@ struct tstForce
 enum enMainState
 {
     StateSetup,
-    StateMeasure
+    StateMeasure,
+    StateTare
 };
 
 class clAssembly
@@ -58,6 +59,7 @@ public:
     tstForce force;
 
     enMainState state = StateSetup;
+    byte tareCountdown = 0; // seconds remaining until tare-zero fires, valid while state == StateTare
 
 public:
     void setup();

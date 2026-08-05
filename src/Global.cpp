@@ -165,7 +165,9 @@ void clAssembly::processKeys()
 {
     if (keys[0].edge)
     {
-        Force.tare(); // Key 0 --> tare to zero
+        // Key 0 --> start tare-zero countdown, actual tare fires in main loop after it elapses
+        state = StateTare;
+        tareCountdown = 2;
     }
     else if (keys[1].edge)
     {
