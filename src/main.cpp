@@ -43,29 +43,9 @@ void loop()
         {
             Assembly.state = StateMeasure;
         }
-        else if (Assembly.state == StateTare)
+        else if ((Assembly.state == StateTare || Assembly.state == StateCalibrate) && Assembly.stateCountdown > 0)
         {
-            if (Assembly.stateCountdown > 0)
-            {
-                Assembly.stateCountdown--;
-            }
-            if (Assembly.stateCountdown == 0)
-            {
-                Force.tare();
-                Assembly.state = StateMeasure;
-            }
-        }
-        else if (Assembly.state == StateCalibrate)
-        {
-            if (Assembly.stateCountdown > 0)
-            {
-                Assembly.stateCountdown--;
-            }
-            if (Assembly.stateCountdown == 0)
-            {
-                Force.calibrate(1.0f * EARTH_GRAVITY_MPS2); // calibrate against a 1kg reference weight
-                Assembly.state = StateMeasure;
-            }
+            Assembly.stateCountdown--;
         }
     }
 
@@ -77,6 +57,22 @@ void loop()
 
         pollKeyPressed();
         Assembly.processKeys();
+
+        // countdown elapsed --> wait for key release before firing, so the action
+        // doesn't run while the user is still pressing (e.g. shaking the sensor)
+        if (Assembly.stateCountdown == 0)
+        {
+            if (Assembly.state == StateTare && Assembly.keys[0].pressed)
+            {
+                Force.tare();
+                Assembly.state = StateMeasure;
+            }
+            else if (Assembly.state == StateCalibrate && Assembly.keys[1].pressed)
+            {
+                Force.calibrate(1.0f * EARTH_GRAVITY_MPS2); // calibrate against a 1kg reference weight
+                Assembly.state = StateMeasure;
+            }
+        }
     }
 
     wifiLoop();
