@@ -167,12 +167,48 @@
                     document.getElementById('offsetId').textContent = data.offset;
                     document.getElementById('scaleId').textContent = data.scale;
                     document.getElementById('stateTextId').textContent = data.stateText;
+                    drawForceChart(data.forceHistory);
                     assemblyTableSemaphore = true;
                 })
                 .catch(function (error) {
                     console.error("Error loading assembly:", error);
                     assemblyTableSemaphore = true;
                 });
+        }
+
+        // draws the forceHistory array as a line, autoscaled to its own min/max,
+        // same idea as drawForceGraph() on the OLED (Oled.cpp)
+        function drawForceChart(history) {
+            const canvas = document.getElementById('forceChartId');
+            if (!canvas || !history || history.length < 2) {
+                return;
+            }
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width;
+            const h = canvas.height;
+            ctx.clearRect(0, 0, w, h);
+
+            let min = history[0];
+            let max = history[0];
+            history.forEach(function (v) {
+                if (v < min) min = v;
+                if (v > max) max = v;
+            });
+            const range = max - min;
+
+            ctx.strokeStyle = '#0077cc';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            history.forEach(function (v, i) {
+                const x = (i / (history.length - 1)) * w;
+                const y = range > 0 ? h - ((v - min) / range) * h : h / 2;
+                if (i === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            });
+            ctx.stroke();
         }
 
         function showSpinner() {

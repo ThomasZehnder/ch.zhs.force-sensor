@@ -167,6 +167,13 @@ aside li {
   padding-bottom: 5px;
 }
 
+#chart canvas {
+  background-color: #fff;
+  border: 1px solid #999;
+  border-radius: 4px;
+  max-width: 100%;
+}
+
 aside h3 {
   text-align: center;
   margin: 10px;
