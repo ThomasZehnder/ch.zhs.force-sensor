@@ -18,6 +18,13 @@ void clForce::loop()
     if (Assembly.force.sensor.is_ready())
     {
         Assembly.force.value = Assembly.force.sensor.get_units(1);
+
+        Assembly.force.history[Assembly.force.historyIndex] = Assembly.force.value;
+        Assembly.force.historyIndex = (Assembly.force.historyIndex + 1) % FORCE_HISTORY_SIZE;
+        if (Assembly.force.historyIndex == 0)
+        {
+            Assembly.force.historyFull = true;
+        }
     }
 }
 

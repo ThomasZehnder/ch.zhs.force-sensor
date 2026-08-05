@@ -168,6 +168,15 @@ void assemblyJson()
   doc["offset"] = Assembly.force.sensor.get_offset();
   doc["scale"] = Assembly.force.sensor.get_scale();
 
+  // rolling history, chronological order (oldest to newest), 200ms interval covering the last 10s
+  JsonArray forceHistory = doc.createNestedArray("forceHistory");
+  int historyCount = Assembly.force.historyFull ? FORCE_HISTORY_SIZE : Assembly.force.historyIndex;
+  int historyStart = Assembly.force.historyFull ? Assembly.force.historyIndex : 0;
+  for (int i = 0; i < historyCount; i++)
+  {
+    forceHistory.add(Assembly.force.history[(historyStart + i) % FORCE_HISTORY_SIZE]);
+  }
+
   doc["key_1"] = Assembly.keys[0].pressed;
   doc["key_2"] = Assembly.keys[1].pressed;
 

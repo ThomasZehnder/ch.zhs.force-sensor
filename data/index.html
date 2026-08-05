@@ -163,7 +163,7 @@
                     return response.json();
                 })
                 .then(function (data) {
-                    document.getElementById('forceId').textContent = Number(data.force).toFixed(2) + " N";
+                    document.getElementById('forceId').textContent = Number(data.force).toFixed(1) + " N";
                     document.getElementById('offsetId').textContent = data.offset;
                     document.getElementById('scaleId').textContent = data.scale;
                     document.getElementById('stateTextId').textContent = data.stateText;

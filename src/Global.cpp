@@ -12,7 +12,7 @@
 clAssembly Assembly;
 
 // Use http://arduinojson.org/v6/assistant to compute the capacity.
-StaticJsonDocument<2048> doc;
+StaticJsonDocument<4096> doc;
 
 void SerialFileOut(const char *filename)
 {

@@ -14,6 +14,11 @@ const long CENTI_SECOUND_INTERVAL = 50;
 unsigned long preCentiSecoundMillis = 0;
 bool centiSecoundTick = false;
 
+// 200ms tick used to sample the force sensor (milliseconds)
+const long FORCE_SAMPLE_INTERVAL = 200;
+unsigned long preForceSampleMillis = 0;
+bool forceSampleTick = false;
+
 unsigned long currentMillis = 0;
 
 // ledState used to set the LED
@@ -26,6 +31,10 @@ bool hwCentiSecoundTick(void)
 bool hwSecoundTick(void)
 {
     return secoundTick;
+}
+bool hwForceSampleTick(void)
+{
+    return forceSampleTick;
 }
 
 unsigned long hwGetMillis(void)
@@ -76,6 +85,16 @@ void hwLoop(void)
     else
     {
         centiSecoundTick = false;
+    }
+    // 200ms force sample tick
+    if ((long)(currentMillis - preForceSampleMillis) > 0)
+    {
+        preForceSampleMillis = currentMillis + FORCE_SAMPLE_INTERVAL;
+        forceSampleTick = true;
+    }
+    else
+    {
+        forceSampleTick = false;
     }
 }
 

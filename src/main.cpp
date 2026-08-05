@@ -45,11 +45,17 @@ void loop()
         }
     }
 
-    // 50ms tick
-    if (hwCentiSecoundTick())
+    // 200ms tick
+    if (hwForceSampleTick())
     {
         Force.loop();
         oledLoop();
+    }
+
+    // 50ms tick
+    if (hwCentiSecoundTick())
+    {
+        
 
         pollKeyPressed();
         Assembly.processKeys();

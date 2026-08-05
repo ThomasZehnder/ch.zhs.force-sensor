@@ -19,6 +19,7 @@ void hwLoop(void);
 
 bool hwSecoundTick(void);
 bool hwCentiSecoundTick(void);
+bool hwForceSampleTick(void);
 unsigned long hwGetMillis(void);
 
 //bool keyPressed(int keyNumber);

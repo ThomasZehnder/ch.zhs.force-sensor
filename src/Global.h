@@ -30,10 +30,16 @@ struct tstKey
     int pressedCounter;
 };
 
+// rolling history at 200ms sampling interval, covering the last 10 seconds
+#define FORCE_HISTORY_SIZE 50
 struct tstForce
 {
     float value; // measured force in Newton
     HX711 sensor;
+
+    float history[FORCE_HISTORY_SIZE] = {0}; // circular buffer, oldest to newest via historyIndex/historyFull
+    int historyIndex = 0;                    // next slot to write
+    bool historyFull = false;                // true once the buffer has wrapped around at least once
 };
 
 enum enMainState
@@ -82,6 +88,6 @@ extern clAssembly Assembly;
 
 // Allocate a static JsonDocument
 // Use https://arduinojson.org/v6/assistant to compute the capacity.
-extern StaticJsonDocument<2048> doc;
+extern StaticJsonDocument<4096> doc;
 
 #endif // GLOBAL_H
