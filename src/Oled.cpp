@@ -162,6 +162,14 @@ void oledLoop()
         display.setFont(ArialMT_Plain_16);
         display.drawString(0, 0 + Y_OFFSET + 14, "CALIBRATE 1kg ...");
     }
+    else if (Assembly.state == StateReboot)
+    {
+        display.setTextAlignment(TEXT_ALIGN_RIGHT);
+        display.drawString(128, 0, "Reboot");
+
+        display.setFont(ArialMT_Plain_16);
+        display.drawString(0, 0 + Y_OFFSET + 14, "REBOOTING ...");
+    }
     else
     {
         display.setTextAlignment(TEXT_ALIGN_RIGHT);

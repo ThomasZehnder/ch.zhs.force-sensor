@@ -41,7 +41,8 @@ enum enMainState
     StateSetup,
     StateMeasure,
     StateTare,
-    StateCalibrate
+    StateCalibrate,
+    StateReboot
 };
 
 class clAssembly
@@ -62,7 +63,7 @@ public:
     tstForce force;
 
     enMainState state = StateSetup;
-    byte stateCountdown = 0; // seconds remaining until the pending action (tare/calibrate) fires
+    byte stateCountdown = 0; // seconds remaining until the pending action (tare/calibrate/reboot) fires
 
 public:
     void setup();

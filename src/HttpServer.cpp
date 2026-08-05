@@ -30,7 +30,6 @@ void handleFileStore();                 // store content to file
 #define ACTIVITY_LED_PIN LED_BUILTIN
 
 long triggerActivityTime = 0;
-long triggerRebootTime = 0;
 
 String lastDownloadFilename = "-";
 
@@ -135,6 +134,10 @@ String state2Text(enMainState state)
     return "Measure";
   case StateTare:
     return "Tare";
+  case StateCalibrate:
+    return "Calibrate";
+  case StateReboot:
+    return "Reboot";
   default:
     return "Unknown";
   }
@@ -215,8 +218,6 @@ void handleNotFound()
   Serial.println(message);
 }
 
-void (*rebootFunc)(void) = 0; // declare reset function @ address 0
-
 void reboot(void)
 {
   if (!server.hasArg("bootmode"))
@@ -230,10 +231,8 @@ void reboot(void)
   {
     handleFileRead("reboot.html");
     server.send(200, "text/plain", "reboot arduino in 1 second !!!");
-    triggerRebootTime = millis();
     triggerActivity();
-    // Assembly.rebootProcess();
-
+    Assembly.rebootProcess();
   }
 }
 
@@ -417,16 +416,6 @@ void httpServerLoop(void)
     {
       digitalWrite(ACTIVITY_LED_PIN, 1);
       triggerActivityTime = 0;
-    }
-  }
-  // reboot after 2000ms
-  if (triggerRebootTime != 0)
-  {
-    if ((long)millis() - triggerRebootTime - 2000 > 0)
-    {
-      Serial.println("httpLoop --> Reboot REST service");
-      delay(50);    // allow serial output to finish
-      rebootFunc(); // call reboot ESP.restart()
     }
   }
 }

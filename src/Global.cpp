@@ -143,6 +143,13 @@ void clAssembly::setup()
     Serial.println("Assembly.setup --> end");
 }
 
+void clAssembly::rebootProcess()
+{
+    // show "rebooting" on the OLED for 1s, actual reboot fires in main loop after it elapses
+    state = StateReboot;
+    stateCountdown = 1;
+}
+
 void clAssembly::wlanConnectedProcess()
 {
     localIp = WiFi.localIP().toString();

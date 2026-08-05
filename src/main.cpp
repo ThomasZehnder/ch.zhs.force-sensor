@@ -43,7 +43,7 @@ void loop()
         {
             Assembly.state = StateMeasure;
         }
-        else if ((Assembly.state == StateTare || Assembly.state == StateCalibrate) && Assembly.stateCountdown > 0)
+        else if ((Assembly.state == StateTare || Assembly.state == StateCalibrate || Assembly.state == StateReboot) && Assembly.stateCountdown > 0)
         {
             Assembly.stateCountdown--;
         }
@@ -71,6 +71,11 @@ void loop()
             {
                 Force.calibrate(1.0f * EARTH_GRAVITY_MPS2); // calibrate against a 1kg reference weight
                 Assembly.state = StateMeasure;
+            }
+            else if (Assembly.state == StateReboot)
+            {
+                Serial.println("main.loop --> rebooting now");
+                ESP.restart();
             }
         }
     }
