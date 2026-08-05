@@ -333,11 +333,22 @@ void oledLoop()
         display.setFont(ArialMT_Plain_16);
         display.drawString(0, 0 + Y_OFFSET + 14, "TARA 0 ...");
     }
+    else if (Assembly.state == StateCalibrate)
+    {
+        display.setTextAlignment(TEXT_ALIGN_RIGHT);
+        display.drawString(128, 0, "Calibrate");
+
+        display.setTextAlignment(TEXT_ALIGN_LEFT);
+        display.setFont(ArialMT_Plain_10);
+        display.drawString(0, 0 + Y_OFFSET, "Place 1kg on sensor!");
+
+        display.setFont(ArialMT_Plain_16);
+        display.drawString(0, 0 + Y_OFFSET + 14, "CALIBRATE 1kg ...");
+    }
     else
     {
-        // Draw actual MQTT status top right
         display.setTextAlignment(TEXT_ALIGN_RIGHT);
-        display.drawString(128, 0, "Force"); // top right);   //top right
+        display.drawString(128, 0, "Force"); //top right
 
         display.setTextAlignment(TEXT_ALIGN_LEFT);
         display.setFont(ArialMT_Plain_16);

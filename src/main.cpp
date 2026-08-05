@@ -45,13 +45,25 @@ void loop()
         }
         else if (Assembly.state == StateTare)
         {
-            if (Assembly.tareCountdown > 0)
+            if (Assembly.stateCountdown > 0)
             {
-                Assembly.tareCountdown--;
+                Assembly.stateCountdown--;
             }
-            if (Assembly.tareCountdown == 0)
+            if (Assembly.stateCountdown == 0)
             {
                 Force.tare();
+                Assembly.state = StateMeasure;
+            }
+        }
+        else if (Assembly.state == StateCalibrate)
+        {
+            if (Assembly.stateCountdown > 0)
+            {
+                Assembly.stateCountdown--;
+            }
+            if (Assembly.stateCountdown == 0)
+            {
+                Force.calibrate(1.0f * EARTH_GRAVITY_MPS2); // calibrate against a 1kg reference weight
                 Assembly.state = StateMeasure;
             }
         }

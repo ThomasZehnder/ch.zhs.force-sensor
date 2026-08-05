@@ -167,10 +167,12 @@ void clAssembly::processKeys()
     {
         // Key 0 --> show "tare now" for 1s, actual tare fires in main loop after it elapses
         state = StateTare;
-        tareCountdown = 1;
+        stateCountdown = 1;
     }
     else if (keys[1].edge)
     {
-        Force.calibrate(1.0f * EARTH_GRAVITY_MPS2); // Key 1 --> calibrate against a 1kg reference weight
+        // Key 1 --> show "calibrate 1kg" for 1s, actual calibration fires in main loop after it elapses
+        state = StateCalibrate;
+        stateCountdown = 1;
     }
 }
