@@ -147,7 +147,7 @@ void clAssembly::rebootProcess()
 {
     // show "rebooting" on the OLED for 1s, actual reboot fires in main loop after it elapses
     state = StateReboot;
-    stateCountdown = 1;
+    stateStartMillis = millis();
 }
 
 void clAssembly::wlanConnectedProcess()
@@ -174,12 +174,12 @@ void clAssembly::processKeys()
     {
         // Key 0 --> show "tare now" for 1s, actual tare fires in main loop after it elapses
         state = StateTare;
-        stateCountdown = 1;
+        stateStartMillis = millis();
     }
     else if (keys[1].edge)
     {
         // Key 1 --> show "calibrate 1kg" for 1s, actual calibration fires in main loop after it elapses
         state = StateCalibrate;
-        stateCountdown = 1;
+        stateStartMillis = millis();
     }
 }

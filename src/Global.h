@@ -63,7 +63,7 @@ public:
     tstForce force;
 
     enMainState state = StateSetup;
-    byte stateCountdown = 0; // seconds remaining until the pending action (tare/calibrate/reboot) fires
+    unsigned long stateStartMillis = 0; // millis() timestamp when the current state was entered
 
 public:
     void setup();

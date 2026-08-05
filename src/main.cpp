@@ -43,10 +43,6 @@ void loop()
         {
             Assembly.state = StateMeasure;
         }
-        else if ((Assembly.state == StateTare || Assembly.state == StateCalibrate || Assembly.state == StateReboot) && Assembly.stateCountdown > 0)
-        {
-            Assembly.stateCountdown--;
-        }
     }
 
     // 50ms tick
@@ -58,9 +54,10 @@ void loop()
         pollKeyPressed();
         Assembly.processKeys();
 
-        // countdown elapsed --> wait for key release before firing, so the action
-        // doesn't run while the user is still pressing (e.g. shaking the sensor)
-        if (Assembly.stateCountdown == 0)
+        // 1s elapsed since the state was entered --> wait for key release before firing,
+        // so the action doesn't run while the user is still pressing (e.g. shaking the sensor)
+        bool actionDelayElapsed = (millis() - Assembly.stateStartMillis) >= 1000;
+        if (actionDelayElapsed)
         {
             if (Assembly.state == StateTare && Assembly.keys[0].pressed)
             {
