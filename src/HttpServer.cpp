@@ -129,6 +129,21 @@ void setAllowCors()
   server.sendHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 }
 
+String state2Text(enMainState state)
+{
+  switch (state)
+  {
+  case StateSetup:
+    return "Setup";
+  case StateMeasure:
+    return "Measure";
+  case StateTare:
+    return "Tare";
+  default:
+    return "Unknown";
+  }
+}
+
 void assemblyJson()
 {
   triggerActivity();
@@ -147,7 +162,8 @@ void assemblyJson()
   doc["rssi"] = httpRssi();
 
   doc["wifiConnected"] = Assembly.wifiConnected;
-  doc["status"] = Assembly.state;
+  doc["state"] = Assembly.state;
+  doc["stateText"] = state2Text(Assembly.state);
 
   doc["force"] = Assembly.force.value;
 
