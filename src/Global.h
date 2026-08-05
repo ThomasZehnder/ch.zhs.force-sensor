@@ -62,6 +62,7 @@ public:
 
     String localIp;
     String ssid;
+    String apSsid;
 
     struct tstKey keys[NBRKEYS];
 

@@ -188,7 +188,7 @@ void oledLoop()
     // Draw ip
     display.setFont(ArialMT_Plain_10);
     display.setTextAlignment(TEXT_ALIGN_LEFT);
-    display.drawString(0, 0, Assembly.localIp); // top right
+    display.drawString(0, 0, Assembly.apSsid); // top right
 
     if (Assembly.state == StateTare)
     {

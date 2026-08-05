@@ -314,6 +314,9 @@ void httpServerSetup(void)
 {
 
   Serial.println("HttpSetup --> Start");
+  // SSID = DEVICEID + last two hex digits of the AP MAC address, to tell devices apart
+  String apMac = WiFi.softAPmacAddress();
+  Assembly.apSsid = String(Assembly.deviceId) + apMac.substring(apMac.length() - 2);
 
   pinMode(ACTIVITY_LED_PIN, OUTPUT);
   digitalWrite(ACTIVITY_LED_PIN, 1);
@@ -341,12 +344,10 @@ void httpServerSetup(void)
   {
     Serial.println("HttpSetup --> Setting the AP Mode with SSID, NO Password...");
 
-    // SSID = DEVICEID + last two hex digits of the AP MAC address, to tell devices apart
-    String apMac = WiFi.softAPmacAddress();
-    String apSsid = String(Assembly.deviceId) + apMac.substring(apMac.length() - 2);
-
     // Setting the AP Mode with SSID, Password, and Max Connection Limit
-    if (WiFi.softAP(apSsid.c_str(), "", 1, false, 1) == true)
+    Serial.print("HttpSetup  --> AP ACCESS SSID: ");
+    Serial.println(Assembly.apSsid);
+    if (WiFi.softAP(Assembly.apSsid.c_str(), "", 1, false, 1) == true)
     {
       Serial.print("Access Point is Creadted with MAC ADDDR: ");
       Serial.println(apMac);

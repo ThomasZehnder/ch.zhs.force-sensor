@@ -1,6 +1,17 @@
 # avm-force-sensor-arduino
 2'000N force sensor with arduino board
 
+## Features
+
+- **Force measurement** via HX711 load cell amplifier, calibrated in Newton (tare / 1kg reference calibration)
+- **Physical controls**: two buttons (Key0 = Tare, Key1 = Calibrate 1kg) with a 1s confirmation delay on the OLED before the action fires, so accidental or held presses don't trigger it
+- **Rolling force history**: samples every 200ms, keeps the last 10s (50 values) in a ring buffer; cleared automatically on tare/calibrate
+- **OLED display** (SSD1306 128x64): access point SSID, live force reading, and an autoscaled line graph of the last 50 force values in the lower half of the screen; dedicated screens for Tare/Calibrate/Reboot and an optional WiFi network scan at boot
+- **Web frontend** served from LittleFS: Home page with a live-updating status table (force/offset/scale/state), Diagnose page, file browser & upload, and a CodeMirror-based JSON/JS config editor (lazy-loaded so the home page stays fast)
+- **REST API**: `/assembly` (JSON with force value, forceHistory array, offset, scale, state, WiFi/key status), `/dir`, `/reboot`, `/json`
+- **WiFi**: connects to up to 3 configured networks (WiFiMulti); falls back to its own Access Point (SSID = device ID + MAC suffix) if none connect or if forced via config
+- **Configuration** via `config_main.json` (DEVICEID, ACCESSPOINT, SCANNETWORKS) and `config_wlan.json` (WLAN credentials), editable through the web UI
+
 ## Get from Git
     git clone tbd
 
