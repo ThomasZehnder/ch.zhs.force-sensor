@@ -6,22 +6,6 @@
     <link rel="icon" type="image/png" href="./favicon.png">
     <link rel="stylesheet" href="./style.css">
 
-
-    <!--CodeMirror instance -->
-    <link rel="stylesheet" href="./lib/codemirror.css">
-    <script src="./lib/codemirror.js"></script>
-    <script src="./addon/mode/javascript/javascript.js"></script>
-    <link rel="stylesheet" href="./theme/cobalt.css">
-
-    <link rel="stylesheet" href="./addon/hint/show-hint.css">
-    <script src="./addon/hint/javascript-hint.js"></script>
-    <script src="./addon/hint/show-hint.js"></script>
-
-    <script src="./addon/edit/closebrackets.js"></script>
-    <script src="./addon/edit/closetag.js"></script>
-    <script src="./addon/edit/matchbrackets.js"></script>
-    <script src="./addon/edit/trailingspace.js"></script>
-
     <script>
 
         function loadMain(articleUrl, asideUrl, param) {
@@ -206,33 +190,73 @@
             }
         }
 
-        // Code Mirror functions
+        // Code Mirror functions - lazy-loaded, only a-config/a-js-editor/a-js-monitor need this,
+        // so a-home doesn't have to wait for ~11 extra file round-trips to the ESP8266 on first load
+        var codeMirrorAssetsPromise = null;
+
+        function loadScript(src) {
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = src;
+                script.onload = resolve;
+                script.onerror = () => reject(new Error('Failed to load ' + src));
+                document.head.appendChild(script);
+            });
+        }
+
+        function loadStylesheet(href) {
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = href;
+            document.head.appendChild(link);
+        }
+
+        function loadCodeMirrorAssets() {
+            if (!codeMirrorAssetsPromise) {
+                loadStylesheet('./lib/codemirror.css');
+                loadStylesheet('./theme/cobalt.css');
+                loadStylesheet('./addon/hint/show-hint.css');
+
+                codeMirrorAssetsPromise = loadScript('./lib/codemirror.js')
+                    .then(() => loadScript('./addon/mode/javascript/javascript.js'))
+                    .then(() => loadScript('./addon/hint/javascript-hint.js'))
+                    .then(() => loadScript('./addon/hint/show-hint.js'))
+                    .then(() => loadScript('./addon/edit/closebrackets.js'))
+                    .then(() => loadScript('./addon/edit/closetag.js'))
+                    .then(() => loadScript('./addon/edit/matchbrackets.js'))
+                    .then(() => loadScript('./addon/edit/trailingspace.js'));
+            }
+            return codeMirrorAssetsPromise;
+        }
+
         var editorUrl = "";
         var editor;
         function loadEditor(url) {
-            editorUrl = url;
-            editor = CodeMirror.fromTextArea(document.getElementById("editorId"), {
-                mode: {
-                    name: "javascript",
-                    globalVars: true
-                },
-                theme: "cobalt",
-                lineNumbers: true,
+            loadCodeMirrorAssets().then(function () {
+                editorUrl = url;
+                editor = CodeMirror.fromTextArea(document.getElementById("editorId"), {
+                    mode: {
+                        name: "javascript",
+                        globalVars: true
+                    },
+                    theme: "cobalt",
+                    lineNumbers: true,
 
-                autoCloseBrackets: true,
-                autoCloseTags: true,
-                matchBrackets: true,
-                showTrailingSpace: true,
+                    autoCloseBrackets: true,
+                    autoCloseTags: true,
+                    matchBrackets: true,
+                    showTrailingSpace: true,
 
-                hint: CodeMirror.hint.javascript,
+                    hint: CodeMirror.hint.javascript,
 
-                extraKeys: {
-                    "Ctrl-Space": "autocomplete"
-                }
+                    extraKeys: {
+                        "Ctrl-Space": "autocomplete"
+                    }
 
+                });
+                editor.save();
+                loadCodeMirror();
             });
-            editor.save();
-            loadCodeMirror();
         }
         function loadCodeMirror() {
             fetch(editorUrl)
