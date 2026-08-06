@@ -33,25 +33,12 @@
                         startTimer(['/assembly'], ['assemblyId'], 500);
                     }
                     else if (url.startsWith('a-config')) {
-                        //console.log("Load Configpage: ", param)
-                        //loadElement(param, "preId");
                         loadEditor(param);
                         setTitle(String("Edit ") + param);
                     }
                     else if (url.startsWith('a-files')) {
                         console.log("Load files: ", param)
                         loadElement(param, "preId");
-                    }
-                    else if (url.startsWith('a-js-editor')) {
-                        console.log("JavaSript file: ", param)
-                        loadEditor(param);
-                        setTitle(String("Javascript Editor for ") + param);
-                    }
-                    else if (url.startsWith('a-js-monitor')) {
-                        console.log("JavaSript file: ", param)
-                        loadEditor(param);
-                        setTitle(String("Javascript Monitor ") + param);
-                        startTimer(['/jsconsole', '/jserror'], ['consoleId', 'errorId'], 10000);
                     }
                 });
         }
