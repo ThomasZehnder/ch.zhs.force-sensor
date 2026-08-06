@@ -71,13 +71,17 @@ DEVICEID (String): Used as Identification of device and is used as prefix in the
 
 ACCESSPOINT (bool): force to switch on accesspoint even WIFI is connected. 
 
+SCALE (float) / OFFSET (long): HX711 calibration, persisted automatically whenever Tare (Key0) or Calibrate 1kg (Key1) is used, and loaded again on the next boot instead of re-taring blindly.
+
 
 ### Sample Configuration
 
     {
         "DEVICEID": "force_sensor",
         "ACCESSPOINT": true,
-        "SCANNETWORKS" : false
+        "SCANNETWORKS" : false,
+        "SCALE": 1.0,
+        "OFFSET": 0.0
     }
 
 ## configure Wifi and Webserver

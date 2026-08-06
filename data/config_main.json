@@ -1,5 +1,7 @@
 {
-    "DEVICEID": "forcesensor_avm_",
+    "DEVICEID": "f_sensor_avm_",
     "ACCESSPOINT": true,
-    "SCANNETWORKS": false
+    "SCANNETWORKS": false,
+    "SCALE": 1.0,
+    "OFFSET": 0.0
 }

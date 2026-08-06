@@ -55,11 +55,14 @@ void clAssembly::setupDevice()
         strncpy(deviceId, doc["DEVICEID"] | DEVICEID, sizeof(deviceId));
         cfg.accessPointEnabled = doc["ACCESSPOINT"];
         cfg.scanNetworks = doc["SCANNETWORKS"] | false;
+        cfg.scale = doc["SCALE"] | 1.0f;
+        cfg.offset = doc["OFFSET"] | 0L;
 
 
         Serial.println(String("Assembly.setupDevice --> deviceid: ") + deviceId);
         Serial.println(String("Assembly.setupDevice --> accesspoint_enable: ") + cfg.accessPointEnabled);
         Serial.println(String("Assembly.setupDevice --> scanNetworks: ") + cfg.scanNetworks);
+        Serial.println(String("Assembly.setupDevice --> scale: ") + cfg.scale + " offset: " + cfg.offset);
         file.close(); // Close the file again
     }
     else
@@ -68,6 +71,33 @@ void clAssembly::setupDevice()
         strcpy(deviceId, DEVICEID);
         cfg.accessPointEnabled = true;
         cfg.scanNetworks = false;
+        cfg.scale = 1.0f;
+        cfg.offset = 0L;
+    }
+}
+
+// persist deviceId/cfg (incl. scale/offset from the latest tare/calibrate) to config_main.json
+void clAssembly::saveConfig()
+{
+    char filename[] = "/config_main.json";
+
+    doc.clear();
+    doc["DEVICEID"] = deviceId;
+    doc["ACCESSPOINT"] = cfg.accessPointEnabled;
+    doc["SCANNETWORKS"] = cfg.scanNetworks;
+    doc["SCALE"] = cfg.scale;
+    doc["OFFSET"] = cfg.offset;
+
+    File file = LittleFS.open(filename, "w");
+    if (file)
+    {
+        serializeJson(doc, file);
+        file.close();
+        Serial.println("Assembly.saveConfig --> config_main.json updated");
+    }
+    else
+    {
+        Serial.println("Assembly.saveConfig --> error: could not open config_main.json for writing");
     }
 }
 

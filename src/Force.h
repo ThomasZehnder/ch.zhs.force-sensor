@@ -13,8 +13,6 @@ public:
     void calibrate(float knownForceNewton);
 
 private:
-    float calibrationFactor = 1.0; // counts per Newton, needs calibration against a known reference force
-
     void clearHistory();
 };
 

@@ -9,8 +9,9 @@ clForce Force;
 void clForce::setup()
 {
     Assembly.force.sensor.begin(FORCE_DOUT_PIN, FORCE_SCK_PIN);
-    Assembly.force.sensor.set_scale(calibrationFactor);
-    tare();
+    // load the persisted calibration instead of blindly tare-ing on every boot
+    Assembly.force.sensor.set_scale(Assembly.cfg.scale);
+    Assembly.force.sensor.set_offset(Assembly.cfg.offset);
 }
 
 void clForce::loop()
@@ -42,6 +43,10 @@ void clForce::tare()
     {
         Assembly.force.sensor.tare();
         clearHistory();
+
+        Assembly.cfg.offset = Assembly.force.sensor.get_offset();
+        Assembly.saveConfig();
+
         Serial.print("Force.tare --> done, offset: ");
         Serial.println(Assembly.force.sensor.get_offset());
     }
@@ -65,9 +70,12 @@ void clForce::calibrate(float knownForceNewton)
     }
 
     long rawAverage = Assembly.force.sensor.read_average(10);
-    calibrationFactor = (rawAverage - Assembly.force.sensor.get_offset()) / knownForceNewton;
+    float calibrationFactor = (rawAverage - Assembly.force.sensor.get_offset()) / knownForceNewton;
     Assembly.force.sensor.set_scale(calibrationFactor);
     clearHistory();
+
+    Assembly.cfg.scale = calibrationFactor;
+    Assembly.saveConfig();
 
     Serial.print("Force.calibrate --> new calibration factor: ");
     Serial.println(calibrationFactor);

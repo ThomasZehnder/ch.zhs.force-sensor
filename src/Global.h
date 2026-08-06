@@ -19,6 +19,8 @@ struct tstCfg
     tstCfgWifi wifi[NBRCONNECTIONS];
     bool accessPointEnabled = true;
     bool scanNetworks = false; // configurable via config_main.json, SCANNETWORKS
+    float scale = 1.0;         // HX711 calibration factor (counts per Newton), persisted via config_main.json, SCALE
+    long offset = 0;           // HX711 raw offset, persisted via config_main.json, OFFSET
     byte index = 0; // index used for http and mqtt sebd to cloud, depends on found WIFI Network
 };
 
@@ -75,6 +77,7 @@ public:
 
 public:
     void setup();
+    void saveConfig(); // persist deviceId/cfg (incl. scale/offset) to config_main.json
 
     void rebootProcess();
     void wlanConnectedProcess();
