@@ -368,6 +368,25 @@
                     setFooter("saveCodeMirror error " + err);
                 })
         }
+
+        // validates the editor content as JSON and reformats it (indented, CRLF line endings)
+        function formatJson() {
+            var c = editor.getValue();
+
+            var x;
+            try {
+                x = JSON.parse(c);
+            } catch (e) {
+                alert('JSON not valid: ' + e);
+                setFooter("JSON error " + e);
+                console.log(e);
+                return;
+            }
+
+            var formatted = JSON.stringify(x, null, 4).replace(/\n/g, "\r\n");
+            editor.setValue(formatted);
+            setFooter("formatJson ok");
+        }
     </script>
 </head>
 
