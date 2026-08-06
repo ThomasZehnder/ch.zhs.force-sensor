@@ -71,14 +71,17 @@
                     .then(function (html) {
                         //console.log(html);
                         const myElement = document.getElementById(id);
-                        myElement.innerHTML = html;
-                        loadElementSemaphore = true;
-                        hideSpinner(); // Call this when you want to hide the spinner
+                        if (myElement) { // element can be gone already if the user navigated away while this fetch was in flight
+                            myElement.innerHTML = html;
+                        }
                     })
                     .catch(function (error) {
                         console.error("Error loading element:", error);
                         setFooter("Error loading " + url + ": " + error.message);
+                    })
+                    .finally(function () {
                         loadElementSemaphore = true;
+                        hideSpinner(); // Call this when you want to hide the spinner
                     });
             }
         }

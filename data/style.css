@@ -278,6 +278,7 @@ fieldset {
 
 .spinner-container {
   position: relative;
+  min-height: 60px; /* some pages (aa-config.html, aa-files.html) have no other content to give this height */
 }
 
 .spinner {
