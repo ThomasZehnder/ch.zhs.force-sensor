@@ -363,6 +363,9 @@
                 })
                 .finally(function () {
                     editor.getWrapperElement().style.display = "";
+                    // CodeMirror can't measure line height/width while its wrapper is hidden, so the
+                    // content set via setValue() above doesn't render correctly until refresh() is called
+                    editor.refresh();
                     hideSpinner();
                 });
 
