@@ -212,21 +212,23 @@
         }
 
         function showSpinner() {
+            const spinnerContainer = document.getElementById("spinner-container");
+            if (!spinnerContainer) {
+                console.log("show spinnercontainer not found");
+                return;
+            }
+            if (spinnerContainer.querySelector(".spinner")) {
+                return; // already showing, e.g. loadEditor() and loadCodeMirror() both request it
+            }
             const spinner = document.createElement("div");
             spinner.className = "spinner";
-            const spinnerContainer = document.getElementById("spinner-container");
-            if (spinnerContainer) {
-                spinnerContainer.appendChild(spinner);
-                console.log("show spinner");
-            }
-            else {
-                console.log("show spinnercontainer not found");
-            }
+            spinnerContainer.appendChild(spinner);
+            console.log("show spinner");
         }
 
         function hideSpinner() {
-            const spinner = document.querySelector(".spinner");
             const spinnerContainer = document.getElementById("spinner-container");
+            const spinner = spinnerContainer ? spinnerContainer.querySelector(".spinner") : null;
             if (spinner) {
                 spinnerContainer.removeChild(spinner);
                 console.log("hide spinner");
@@ -300,6 +302,12 @@
         var editorUrl = "";
         var editor;
         function loadEditor(url) {
+            const textarea = document.getElementById("editorId");
+            if (textarea) {
+                textarea.style.display = "none"; // stays hidden until loadCodeMirror() reveals the editor
+            }
+            showSpinner();
+
             loadCodeMirrorAssets().then(function () {
                 editorUrl = url;
                 editor = CodeMirror.fromTextArea(document.getElementById("editorId"), {
@@ -322,14 +330,20 @@
                     }
 
                 });
+                editor.getWrapperElement().style.display = "none"; // don't flash the still-empty editor
                 editor.save();
                 loadCodeMirror();
             }).catch(function (error) {
                 console.error("Error loading CodeMirror assets:", error);
                 setFooter("Error loading CodeMirror assets: " + error.message);
+                hideSpinner();
             });
         }
         function loadCodeMirror() {
+            showSpinner();
+            if (editor) {
+                editor.getWrapperElement().style.display = "none";
+            }
             fetch(editorUrl)
                 .then(function (response) {
                     if (!response.ok) {
@@ -346,6 +360,10 @@
                 .catch(function (error) {
                     console.error("Error loading CodeMirror:", error);
                     setFooter("Error loading " + editorUrl + ": " + error.message);
+                })
+                .finally(function () {
+                    editor.getWrapperElement().style.display = "";
+                    hideSpinner();
                 });
 
         }
