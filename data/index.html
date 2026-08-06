@@ -250,37 +250,62 @@
         // so a-home doesn't have to wait for ~11 extra file round-trips to the ESP8266 on first load
         var codeMirrorAssetsPromise = null;
 
-        function loadScript(src) {
-            return new Promise((resolve, reject) => {
-                const script = document.createElement('script');
-                script.src = src;
-                script.onload = resolve;
-                script.onerror = () => reject(new Error('Failed to load ' + src));
-                document.head.appendChild(script);
+        // retries a failing load up to `retries` extra times before giving up
+        function withRetry(loadFn, description, retries) {
+            return loadFn().catch(function (error) {
+                if (retries <= 0) {
+                    throw error;
+                }
+                console.warn("Retrying " + description + " after error: " + error.message);
+                return withRetry(loadFn, description, retries - 1);
             });
         }
 
+        function loadScript(src) {
+            return withRetry(function () {
+                return new Promise((resolve, reject) => {
+                    const script = document.createElement('script');
+                    script.src = src;
+                    script.onload = resolve;
+                    script.onerror = () => reject(new Error('Failed to load ' + src));
+                    document.head.appendChild(script);
+                });
+            }, src, 2);
+        }
+
         function loadStylesheet(href) {
-            const link = document.createElement('link');
-            link.rel = 'stylesheet';
-            link.href = href;
-            document.head.appendChild(link);
+            return withRetry(function () {
+                return new Promise((resolve, reject) => {
+                    const link = document.createElement('link');
+                    link.rel = 'stylesheet';
+                    link.href = href;
+                    link.onload = resolve;
+                    link.onerror = () => reject(new Error('Failed to load ' + href));
+                    document.head.appendChild(link);
+                });
+            }, href, 2);
         }
 
         function loadCodeMirrorAssets() {
             if (!codeMirrorAssetsPromise) {
-                loadStylesheet('./lib/codemirror.css');
-                loadStylesheet('./theme/cobalt.css');
-                loadStylesheet('./addon/hint/show-hint.css');
-
-                codeMirrorAssetsPromise = loadScript('./lib/codemirror.js')
+                codeMirrorAssetsPromise = Promise.all([
+                    loadStylesheet('./lib/codemirror.css'),
+                    loadStylesheet('./theme/cobalt.css'),
+                    loadStylesheet('./addon/hint/show-hint.css')
+                ])
+                    .then(() => loadScript('./lib/codemirror.js'))
                     .then(() => loadScript('./addon/mode/javascript/javascript.js'))
                     .then(() => loadScript('./addon/hint/javascript-hint.js'))
                     .then(() => loadScript('./addon/hint/show-hint.js'))
                     .then(() => loadScript('./addon/edit/closebrackets.js'))
                     .then(() => loadScript('./addon/edit/closetag.js'))
                     .then(() => loadScript('./addon/edit/matchbrackets.js'))
-                    .then(() => loadScript('./addon/edit/trailingspace.js'));
+                    .then(() => loadScript('./addon/edit/trailingspace.js'))
+                    .catch(function (error) {
+                        // don't cache a permanently failed load - the next loadEditor() call can try again
+                        codeMirrorAssetsPromise = null;
+                        throw error;
+                    });
             }
             return codeMirrorAssetsPromise;
         }
@@ -312,6 +337,9 @@
                 });
                 editor.save();
                 loadCodeMirror();
+            }).catch(function (error) {
+                console.error("Error loading CodeMirror assets:", error);
+                setFooter("Error loading CodeMirror assets: " + error.message);
             });
         }
         function loadCodeMirror() {
