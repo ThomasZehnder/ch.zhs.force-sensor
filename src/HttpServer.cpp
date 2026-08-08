@@ -232,19 +232,26 @@ void handleNotFound()
 
 void reboot(void)
 {
+  triggerActivity();
+  server.sendHeader("Cache-Control", "no-store");
+
   if (!server.hasArg("bootmode"))
   {
     Serial.println("reboot argument 'bootmode' not found!!");
-    server.send(500, "text/plain", "500: reboot ignored ");
+    server.send(400, "application/json", "{\"status\":\"error\",\"message\":\"bootmode argument missing\"}");
     return;
   }
+
   String arg = server.arg("bootmode");
-  if (arg == "espreboot")
+  if (arg != "espreboot")
   {
-    handleFileRead("reboot.html"); // sends the response - do not send another one after this
-    triggerActivity();
-    Assembly.rebootProcess();
+    Serial.println("reboot argument 'bootmode' unknown: " + arg);
+    server.send(400, "application/json", "{\"status\":\"error\",\"message\":\"unknown bootmode\"}");
+    return;
   }
+
+  Assembly.rebootProcess();
+  server.send(200, "application/json", "{\"status\":\"ok\",\"message\":\"rebooting\"}");
 }
 
 void success(void)
@@ -481,8 +488,8 @@ bool handleFileRead(String path)
     if (LittleFS.exists(pathWithGz))                    // If there's a compressed version available
       path += ".gz";                                    // Use the compressed verion
     File file = LittleFS.open(path, "r");               // Open the file
-    if (path.endsWith(".json") || path.endsWith("reboot.html"))
-      server.sendHeader("Cache-Control", "no-store"); // editable config, or an action's response - never cache
+    if (path.endsWith(".json"))
+      server.sendHeader("Cache-Control", "no-store"); // editable via the config UI, never cache
     else
       server.sendHeader("Cache-Control", "public, max-age=432000"); // 5 days
     size_t sent = server.streamFile(file, contentType); // Send it to the client

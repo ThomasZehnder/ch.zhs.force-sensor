@@ -100,11 +100,14 @@
         function sendReboot(bootMode) {
             fetch('reboot?bootmode=' + bootMode)
                 .then(function (response) {
-                    return response.text();
+                    return response.json();
                 })
-                .then(function (html) {
-                    //console.log(html);
-                    setFooter(html);
+                .then(function (data) {
+                    setFooter(data.message);
+                })
+                .catch(function (error) {
+                    console.error("Error sending reboot:", error);
+                    setFooter("Error sending reboot: " + error.message);
                 });
         }
 
