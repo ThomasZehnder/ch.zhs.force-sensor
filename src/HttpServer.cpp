@@ -115,6 +115,7 @@ void handleJson()
   // Lastly, you can print the resulting JSON to a String
   String output;
   serializeJson(doc, output);
+  server.sendHeader("Cache-Control", "no-store");
   server.send(200, "application/json", output);
 }
 
@@ -195,6 +196,7 @@ void assemblyJson()
   String output;
   serializeJsonPretty(doc, output);
   setAllowCors();
+  server.sendHeader("Cache-Control", "no-store");
   server.send(200, "application/json", output);
 }
 
@@ -307,6 +309,7 @@ void _getKeys()
   output += "}";
 
   setAllowCors();
+  server.sendHeader("Cache-Control", "no-store");
   server.send(200, "application/json", output);
 }
 
@@ -470,6 +473,7 @@ bool handleFileRead(String path)
     if (LittleFS.exists(pathWithGz))                    // If there's a compressed version available
       path += ".gz";                                    // Use the compressed verion
     File file = LittleFS.open(path, "r");               // Open the file
+    server.sendHeader("Cache-Control", "public, max-age=86400");
     size_t sent = server.streamFile(file, contentType); // Send it to the client
     file.close();                                       // Close the file again
     Serial.println(String("\tSent file: ") + path + " size: " + sent);
