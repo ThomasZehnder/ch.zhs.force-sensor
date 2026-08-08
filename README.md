@@ -1,4 +1,4 @@
-# avm-force-sensor-arduino
+# zhs-force-sensor-arduino
 2'000N force sensor with arduino board
 
 ## Features
@@ -65,7 +65,7 @@ After creating and saving the file or files you want to upload under the data fo
 see [https://arduino-esp8266.readthedocs.io/en/latest/libraries.html#ticker]
 
 
-# Configure AVM Force Sensor
+# Configure ZHS Force Sensor
 
 DEVICEID (String): Used as Identification of device
 
