@@ -10,7 +10,7 @@
 - **Web frontend** served from LittleFS: Home page with a live-updating status table (force/offset/scale/state), Diagnose page, file browser & upload, and a CodeMirror-based JSON/JS config editor (lazy-loaded so the home page stays fast)
 - **REST API**: `/assembly` (JSON with force value, forceHistory array, offset, scale, state, WiFi/key status), `/dir`, `/reboot`, `/json`
 - **Browser caching**: static assets (HTML/CSS/JS/images) are cached for 5 days; the JSON REST endpoints and the editable `.json` config files are always sent with `Cache-Control: no-store`, so live data and configuration edits are never served stale
-- **WiFi**: connects to up to 3 configured networks (WiFiMulti); falls back to its own Access Point (SSID = device ID + MAC suffix) if none connect or if forced via config. Reconnect attempts are throttled to once every 60s while disconnected, since a WiFi scan+connect attempt blocks the whole loop for several seconds - retrying every loop() iteration would otherwise stall force sampling almost permanently
+- **WiFi**: connects to up to 3 configured networks (WiFiMulti); falls back to its own Access Point (SSID = device ID + MAC suffix, IP `192.168.4.1`) if none connect at boot, or if forced via config. If none of the 3 configured networks was found at boot, the device commits to Access Point only mode and never retries again (until rebooted) - the OLED then shows the Access Point IP instead of a station IP. While a station connection is still possible, reconnect attempts are throttled to once every 60s, since a WiFi scan+connect attempt blocks the whole loop for several seconds - retrying every loop() iteration would otherwise stall force sampling almost permanently
 - **Configuration** via `config_main.json` (DEVICEID, ACCESSPOINT, SCANNETWORKS, SCALE, OFFSET) and `config_wlan.json` (WLAN credentials), editable through the web UI
 
 ## Get from Git
@@ -97,7 +97,9 @@ https://tttapa.github.io/ESP8266/Chap12%20-%20Uploading%20to%20Server.html
 
 Lets inspire: https://github.com/esp8266/Arduino/blob/master/libraries/ESP8266WebServer/examples/FSBrowser/FSBrowser.ino
 
-Configure three WLAN, in case none is connected, ESP8266 will act as WLAN Hotspot.
+Configure three WLAN, in case none is connected, ESP8266 will act as WLAN Hotspot (SSID = device ID + MAC suffix, IP `192.168.4.1`).
+
+If none of the three is found already at boot, the device commits to this Access Point only mode and stops trying to find a network - it will not reconnect on its own even if a configured network comes into range later; only a reboot re-triggers the connection attempt. The OLED reflects this by showing the Access Point IP (`192.168.4.1`) instead of a station IP.
 
 **Security note**: `data/config_wlan.json` holds WLAN passwords in plain text and is listed in `.gitignore` - never force-add or commit it. If it ever does end up in git history, treat the passwords as compromised and rotate them; `git filter-branch`/`git filter-repo` can remove it from history afterwards, but that's a last resort, not a substitute for keeping it out in the first place.
 

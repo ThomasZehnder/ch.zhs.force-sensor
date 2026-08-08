@@ -195,7 +195,7 @@ void oledLoop()
     // otherwise the station IP as usual
     display.setFont(ArialMT_Plain_10);
     display.setTextAlignment(TEXT_ALIGN_LEFT);
-    display.drawString(0, 0, Assembly.apOnlyMode ? Assembly.apIp : Assembly.localIp);
+    display.drawString(0, 0, Assembly.apOnlyMode ? "AP:"+ Assembly.apIp : Assembly.localIp);
 
     if (Assembly.state == StateTare)
     {
