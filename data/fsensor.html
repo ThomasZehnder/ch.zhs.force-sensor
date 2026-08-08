@@ -142,6 +142,15 @@
             min-height: 22px;
             margin-bottom: 10px;
         }
+
+        #chartId {
+            width: 80vw;
+            height: 140px;
+            margin-top: 26px;
+            background: #050505;
+            border: 1px solid #3a1400;
+            border-radius: 4px;
+        }
     </style>
 </head>
 
@@ -154,6 +163,7 @@
             <div class="unit">N</div>
         </div>
         <div class="status" id="statusId"></div>
+        <canvas id="chartId"></canvas>
     </div>
 
     <script>
@@ -237,6 +247,62 @@
             setStatus('OVERLOAD');
         }
 
+        // chart: draws forceHistory autoscaled to its own min/max, same idea as
+        // drawForceChart() in index.html and drawForceGraph() on the OLED (Oled.cpp)
+        var chartEl = document.getElementById('chartId');
+
+        function resizeChart() {
+            chartEl.width = chartEl.clientWidth;
+            chartEl.height = chartEl.clientHeight;
+        }
+        window.addEventListener('resize', resizeChart);
+        resizeChart();
+
+        function drawChartLabel(ctx, text, y) {
+            ctx.font = '12px Arial';
+            var textWidth = ctx.measureText(text).width;
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+            ctx.fillRect(2, y, textWidth + 6, 16);
+            ctx.fillStyle = '#ff6a00';
+            ctx.fillText(text, 4, y + 12);
+        }
+
+        function drawChart(history) {
+            var ctx = chartEl.getContext('2d');
+            var w = chartEl.width;
+            var h = chartEl.height;
+            ctx.clearRect(0, 0, w, h);
+
+            if (!history || history.length < 2) {
+                return;
+            }
+
+            var min = history[0];
+            var max = history[0];
+            history.forEach(function (v) {
+                if (v < min) min = v;
+                if (v > max) max = v;
+            });
+            var range = max - min;
+
+            ctx.strokeStyle = '#ff1a1a';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            history.forEach(function (v, i) {
+                var x = (i / (history.length - 1)) * w;
+                var y = range > 0 ? h - ((v - min) / range) * h : h / 2;
+                if (i === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            });
+            ctx.stroke();
+
+            drawChartLabel(ctx, 'max ' + max.toFixed(1) + ' N', 2);
+            drawChartLabel(ctx, 'min ' + min.toFixed(1) + ' N', h - 18);
+        }
+
         var pollSemaphore = true;
         function pollForce() {
             if (!pollSemaphore) {
@@ -264,6 +330,7 @@
                     } else {
                         showValue(value);
                     }
+                    drawChart(data.forceHistory);
                 })
                 .catch(function (error) {
                     console.error('Error loading assembly:', error);
