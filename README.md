@@ -67,7 +67,7 @@ see [https://arduino-esp8266.readthedocs.io/en/latest/libraries.html#ticker]
 
 # Configure AVM Force Sensor
 
-DEVICEID (String): Used as Identification of device and is used as prefix in the MQTT Topic definition.
+DEVICEID (String): Used as Identification of device
 
 ACCESSPOINT (bool): force to switch on accesspoint even WIFI is connected. 
 

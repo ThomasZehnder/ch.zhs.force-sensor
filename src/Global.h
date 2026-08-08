@@ -21,7 +21,7 @@ struct tstCfg
     bool scanNetworks = false; // configurable via config_main.json, SCANNETWORKS
     float scale = 1.0;         // HX711 calibration factor (counts per Newton), persisted via config_main.json, SCALE
     long offset = 0;           // HX711 raw offset, persisted via config_main.json, OFFSET
-    byte index = 0; // index used for http and mqtt sebd to cloud, depends on found WIFI Network
+    byte index = 0; // index depends on found WIFI Network
 };
 
 #define NBRKEYS 2

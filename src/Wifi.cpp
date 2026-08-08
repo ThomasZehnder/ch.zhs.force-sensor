@@ -18,7 +18,7 @@ void onWifiConnect(const WiFiEventStationModeGotIP &event)
   Assembly.localIp = WiFi.localIP().toString();
   Assembly.ssid = WiFi.SSID();
 
-  // select mqtt server dependend to found Wifi
+  // select try all coonfigurations
   byte cfgIndex = 0;
   for (cfgIndex = 0; cfgIndex < (sizeof(Assembly.cfg.wifi) / sizeof(Assembly.cfg.wifi[0])); cfgIndex++)
   {
