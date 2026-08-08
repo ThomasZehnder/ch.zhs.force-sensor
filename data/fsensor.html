@@ -158,6 +158,7 @@
             height: 140px;
             margin-top: 26px;
             background: #050505;
+            border: 1px solid #5a2a10;
             border-radius: 4px;
         }
     </style>
@@ -278,10 +279,14 @@
             ctx.fillText(text, 4, y + 12);
         }
 
+        var SAMPLE_INTERVAL_S = 0.2; // matches the 200ms sampling interval on the device (Force.cpp)
+        var AXIS_HEIGHT = 18;
+
         function drawChart(history) {
             var ctx = chartEl.getContext('2d');
             var w = chartEl.width;
             var h = chartEl.height;
+            var plotH = h - AXIS_HEIGHT;
             ctx.clearRect(0, 0, w, h);
 
             if (!history || history.length < 2) {
@@ -299,7 +304,7 @@
             var points = history.map(function (v, i) {
                 return {
                     x: (i / (history.length - 1)) * w,
-                    y: range > 0 ? h - ((v - min) / range) * h : h / 2
+                    y: range > 0 ? plotH - ((v - min) / range) * plotH : plotH / 2
                 };
             });
 
@@ -320,7 +325,28 @@
             ctx.stroke();
 
             drawChartLabel(ctx, 'max ' + max.toFixed(1) + ' N', 2);
-            drawChartLabel(ctx, 'min ' + min.toFixed(1) + ' N', h - 18);
+            drawChartLabel(ctx, 'min ' + min.toFixed(1) + ' N', plotH - 18);
+
+            // x-axis: time in seconds, newest sample (right edge) is "now" (0s)
+            ctx.strokeStyle = '#5a2a10';
+            ctx.beginPath();
+            ctx.moveTo(0, plotH + 0.5);
+            ctx.lineTo(w, plotH + 0.5);
+            ctx.stroke();
+
+            var spanS = (history.length - 1) * SAMPLE_INTERVAL_S;
+            ctx.font = '11px Arial';
+            ctx.fillStyle = '#ff6a00';
+            ctx.textBaseline = 'top';
+
+            ctx.textAlign = 'left';
+            ctx.fillText('-' + spanS.toFixed(1) + 's', 2, plotH + 3);
+
+            ctx.textAlign = 'center';
+            ctx.fillText('-' + (spanS / 2).toFixed(1) + 's', w / 2, plotH + 3);
+
+            ctx.textAlign = 'right';
+            ctx.fillText('0s', w - 2, plotH + 3);
         }
 
         var pollSemaphore = true;
