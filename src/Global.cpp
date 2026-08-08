@@ -188,7 +188,7 @@ void clAssembly::wlanConnectedProcess()
     localIp = WiFi.localIP().toString();
     ssid = WiFi.SSID();
 
-    // select cfg index depending on found Wifi, used for http/mqtt send to cloud
+    // select cfg index depending on found Wifi
     for (byte i = 0; i < (sizeof(cfg.wifi) / sizeof(cfg.wifi[0])); i++)
     {
         if (WiFi.SSID() == cfg.wifi[i].ssid)

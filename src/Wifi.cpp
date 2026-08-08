@@ -36,7 +36,7 @@ void onWifiConnect(const WiFiEventStationModeGotIP &event)
 
 void onWifiDisconnect(const WiFiEventStationModeDisconnected &event)
 {
-  Serial.println("MqttSetup (CallBack) --> Disconnected from WiFi.");
+  Serial.println("WifiSetup (CallBack) --> Disconnected from WiFi.");
   Assembly.wifiConnected = false;
   // wifiReconnectTimer.once(2, connectToWifi);
 }
