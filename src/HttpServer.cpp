@@ -473,7 +473,10 @@ bool handleFileRead(String path)
     if (LittleFS.exists(pathWithGz))                    // If there's a compressed version available
       path += ".gz";                                    // Use the compressed verion
     File file = LittleFS.open(path, "r");               // Open the file
-    server.sendHeader("Cache-Control", "public, max-age=86400");
+    if (path.endsWith(".json"))
+      server.sendHeader("Cache-Control", "no-store"); // editable via the config UI, never cache
+    else
+      server.sendHeader("Cache-Control", "public, max-age=432000"); // 5 days
     size_t sent = server.streamFile(file, contentType); // Send it to the client
     file.close();                                       // Close the file again
     Serial.println(String("\tSent file: ") + path + " size: " + sent);
