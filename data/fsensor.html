@@ -130,12 +130,25 @@
             margin-top: 14px;
             text-shadow: 0 0 8px rgba(255, 106, 0, 0.8);
         }
+
+        .state {
+            color: #999;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            font-size: 18px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-align: center;
+            min-height: 22px;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 
 <body>
     <a class="home-link" href="/">&#8962; Home</a>
     <div class="wrap">
+        <div class="state" id="stateId"></div>
         <div class="row">
             <div class="display" id="displayId"></div>
             <div class="unit">N</div>
@@ -187,9 +200,14 @@
         var OVERLOAD_LIMIT = 9999.9; // largest value the [sign][1000][100][10][1].[0.1] layout can show
         var FETCH_TIMEOUT_MS = 2000;
         var statusEl = document.getElementById('statusId');
+        var stateEl = document.getElementById('stateId');
 
         function setStatus(text) {
             statusEl.textContent = text;
+        }
+
+        function setState(text) {
+            stateEl.textContent = text || '';
         }
 
         function formatChars(value) {
@@ -239,6 +257,7 @@
                     return response.json();
                 })
                 .then(function (data) {
+                    setState(data.stateText);
                     var value = Number(data.force);
                     if (!isFinite(value) || Math.abs(value) > OVERLOAD_LIMIT) {
                         showOverload();
@@ -248,7 +267,7 @@
                 })
                 .catch(function (error) {
                     console.error('Error loading assembly:', error);
-                    setStatus(error.name === 'AbortError' ? 'TIMEOUT' : 'NO CONNECTION');
+                    setStatus(error.name === 'AbortError' ? 'TIMEOUT CONECTION TO SENSOR' : 'NO CONNECTION');
                 })
                 .finally(function () {
                     clearTimeout(timeoutId);
