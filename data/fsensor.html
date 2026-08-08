@@ -143,12 +143,21 @@
             margin-bottom: 10px;
         }
 
+        .panel {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 28px 36px;
+            border: 2px solid #4a1c00;
+            border-radius: 20px;
+            background: #0a0a0a;
+        }
+
         #chartId {
             width: 80vw;
             height: 140px;
             margin-top: 26px;
             background: #050505;
-            border: 1px solid #3a1400;
             border-radius: 4px;
         }
     </style>
@@ -158,12 +167,14 @@
     <a class="home-link" href="/">&#8962; Home</a>
     <div class="wrap">
         <div class="state" id="stateId"></div>
-        <div class="row">
-            <div class="display" id="displayId"></div>
-            <div class="unit">N</div>
+        <div class="panel">
+            <div class="row">
+                <div class="display" id="displayId"></div>
+                <div class="unit">N</div>
+            </div>
+            <div class="status" id="statusId"></div>
+            <canvas id="chartId"></canvas>
         </div>
-        <div class="status" id="statusId"></div>
-        <canvas id="chartId"></canvas>
     </div>
 
     <script>
@@ -343,7 +354,7 @@
                 })
                 .catch(function (error) {
                     console.error('Error loading assembly:', error);
-                    setStatus(error.name === 'AbortError' ? 'TIMEOUT CONECTION TO SENSOR' : 'NO CONNECTION');
+                    setStatus(error.name === 'AbortError' ? 'TIMEOUT CONNECTION TO SENSOR' : 'NO CONNECTION');
                 })
                 .finally(function () {
                     clearTimeout(timeoutId);
