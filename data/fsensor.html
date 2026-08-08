@@ -272,6 +272,10 @@
 
         function drawChartLabel(ctx, text, y) {
             ctx.font = '12px Arial';
+            // textAlign/textBaseline persist on the canvas context across draw calls (the x-axis
+            // labels below set them to 'right'/'top') - reset explicitly so this always draws left-aligned
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'alphabetic';
             var textWidth = ctx.measureText(text).width;
             ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
             ctx.fillRect(2, y, textWidth + 6, 16);
