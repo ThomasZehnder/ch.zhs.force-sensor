@@ -284,6 +284,7 @@
         }
 
         var SAMPLE_INTERVAL_S = 0.2; // matches the 200ms sampling interval on the device (Force.cpp)
+        var HISTORY_SIZE = 50; // matches FORCE_HISTORY_SIZE in Global.h - fixed 10s window (50 * 200ms)
         var AXIS_HEIGHT = 18;
 
         function drawChart(history) {
@@ -305,9 +306,13 @@
             });
             var range = max - min;
 
+            // x is relative to the fixed HISTORY_SIZE window, anchored to "now" at the right edge,
+            // so a not-yet-full buffer only occupies the right portion instead of stretching to fill the width
+            var dx = w / (HISTORY_SIZE - 1);
             var points = history.map(function (v, i) {
+                var age = history.length - 1 - i; // 0 = newest sample
                 return {
-                    x: (i / (history.length - 1)) * w,
+                    x: w - age * dx,
                     y: range > 0 ? plotH - ((v - min) / range) * plotH : plotH / 2
                 };
             });
@@ -338,16 +343,16 @@
             ctx.lineTo(w, plotH + 0.5);
             ctx.stroke();
 
-            var spanS = (history.length - 1) * SAMPLE_INTERVAL_S;
+            var spanS = HISTORY_SIZE * SAMPLE_INTERVAL_S; // the full window (50 * 200ms = 10s), for the axis label
             ctx.font = '11px Arial';
             ctx.fillStyle = '#ff6a00';
             ctx.textBaseline = 'top';
 
             ctx.textAlign = 'left';
-            ctx.fillText('-' + spanS.toFixed(1) + 's', 2, plotH + 3);
+            ctx.fillText('-' + spanS.toFixed(0) + 's', 2, plotH + 3);
 
             ctx.textAlign = 'center';
-            ctx.fillText('-' + (spanS / 2).toFixed(1) + 's', w / 2, plotH + 3);
+            ctx.fillText('-' + (spanS / 2).toFixed(0) + 's', w / 2, plotH + 3);
 
             ctx.textAlign = 'right';
             ctx.fillText('0s', w - 2, plotH + 3);
