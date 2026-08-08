@@ -285,18 +285,27 @@
             });
             var range = max - min;
 
+            var points = history.map(function (v, i) {
+                return {
+                    x: (i / (history.length - 1)) * w,
+                    y: range > 0 ? h - ((v - min) / range) * h : h / 2
+                };
+            });
+
             ctx.strokeStyle = '#ff1a1a';
             ctx.lineWidth = 2;
             ctx.beginPath();
-            history.forEach(function (v, i) {
-                var x = (i / (history.length - 1)) * w;
-                var y = range > 0 ? h - ((v - min) / range) * h : h / 2;
-                if (i === 0) {
-                    ctx.moveTo(x, y);
-                } else {
-                    ctx.lineTo(x, y);
-                }
-            });
+            ctx.moveTo(points[0].x, points[0].y);
+            // smooth the line via quadratic curves through the midpoints of each segment,
+            // pulling toward the actual point in between - avoids the overshoot a full spline can have
+            for (var i = 1; i < points.length - 1; i++) {
+                var midX = (points[i].x + points[i + 1].x) / 2;
+                var midY = (points[i].y + points[i + 1].y) / 2;
+                ctx.quadraticCurveTo(points[i].x, points[i].y, midX, midY);
+            }
+            var last = points[points.length - 1];
+            var secondLast = points[points.length - 2];
+            ctx.quadraticCurveTo(secondLast.x, secondLast.y, last.x, last.y);
             ctx.stroke();
 
             drawChartLabel(ctx, 'max ' + max.toFixed(1) + ' N', 2);
