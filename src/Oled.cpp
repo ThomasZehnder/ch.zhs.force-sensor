@@ -214,12 +214,14 @@ void oledLoop()
         display.setTextAlignment(TEXT_ALIGN_RIGHT);
         display.drawString(128, 0, "Calibrate");
 
+        String calibrateKg = String(Assembly.cfg.taraCalibrateKg, 2) + "kg";
+
         display.setTextAlignment(TEXT_ALIGN_LEFT);
         display.setFont(ArialMT_Plain_10);
-        display.drawString(0, 0 + Y_OFFSET, "Place 1kg on sensor!");
+        display.drawString(0, 0 + Y_OFFSET, "Place " + calibrateKg + " on sensor!");
 
         display.setFont(ArialMT_Plain_16);
-        display.drawString(0, 0 + Y_OFFSET + 14, "CALIBRATE 1kg ...");
+        display.drawString(0, 0 + Y_OFFSET + 14, "CALIBRATE " + calibrateKg + " ...");
     }
     else if (Assembly.state == StateReboot)
     {
