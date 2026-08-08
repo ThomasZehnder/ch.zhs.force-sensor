@@ -241,8 +241,7 @@ void reboot(void)
   String arg = server.arg("bootmode");
   if (arg == "espreboot")
   {
-    handleFileRead("reboot.html");
-    server.send(200, "text/plain", "reboot arduino in 1 second !!!");
+    handleFileRead("reboot.html"); // sends the response - do not send another one after this
     triggerActivity();
     Assembly.rebootProcess();
   }
@@ -482,8 +481,8 @@ bool handleFileRead(String path)
     if (LittleFS.exists(pathWithGz))                    // If there's a compressed version available
       path += ".gz";                                    // Use the compressed verion
     File file = LittleFS.open(path, "r");               // Open the file
-    if (path.endsWith(".json"))
-      server.sendHeader("Cache-Control", "no-store"); // editable via the config UI, never cache
+    if (path.endsWith(".json") || path.endsWith("reboot.html"))
+      server.sendHeader("Cache-Control", "no-store"); // editable config, or an action's response - never cache
     else
       server.sendHeader("Cache-Control", "public, max-age=432000"); // 5 days
     size_t sent = server.streamFile(file, contentType); // Send it to the client
