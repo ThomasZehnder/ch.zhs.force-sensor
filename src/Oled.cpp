@@ -191,10 +191,11 @@ void oledLoop()
     // Draw a line horizontally
     display.drawHorizontalLine(0, Y_OFFSET - 1, 128); // last yellow
 
-    // Draw ip
+    // Draw ip - the AP's own IP once no configured WiFi was found (no station IP to show then),
+    // otherwise the station IP as usual
     display.setFont(ArialMT_Plain_10);
     display.setTextAlignment(TEXT_ALIGN_LEFT);
-    display.drawString(0, 0, Assembly.localIp); // top right
+    display.drawString(0, 0, Assembly.apOnlyMode ? Assembly.apIp : Assembly.localIp);
 
     if (Assembly.state == StateTare)
     {

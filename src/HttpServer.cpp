@@ -358,10 +358,11 @@ void httpServerSetup(void)
     Serial.println(Assembly.apSsid);
     if (WiFi.softAP(Assembly.apSsid.c_str(), "", 1, false, 1) == true)
     {
+      Assembly.apIp = WiFi.softAPIP().toString();
       Serial.print("Access Point is Creadted with MAC ADDDR: ");
       Serial.println(apMac);
       Serial.print("Access Point IP: ");
-      Serial.println(WiFi.softAPIP());
+      Serial.println(Assembly.apIp);
       Serial.print("getFlashChipId: ");
       Serial.println(ESP.getFlashChipId());
     }
@@ -370,6 +371,9 @@ void httpServerSetup(void)
       Serial.println("Unable to Create Access Point");
     }
   }
+
+  // no configured WiFi found at boot -> commit to Access Point only mode, never retry (see httpServerLoop())
+  Assembly.apOnlyMode = wifiConnectError;
 
   Serial.println("HttpSetup --> Mound File System: LittleFS");
   // Start the SPI Flash Files System
@@ -430,8 +434,10 @@ void httpServerLoop(void)
   // several seconds (WiFi scan + a connect attempt per configured network, see ESP8266WiFiMulti.cpp) -
   // calling it every loop() iteration would then stall everything else (force sampling, OLED, HTTP)
   // almost permanently, so retries are throttled while there is no connection.
+  // If no configured WiFi was found already at boot, Assembly.apOnlyMode is set and no further
+  // attempts are made at all - the device stays in Access Point only mode until rebooted.
   static unsigned long nextWifiRetryMillis = 0;
-  if (WiFi.status() == WL_CONNECTED || (long)(millis() - nextWifiRetryMillis) >= 0)
+  if (!Assembly.apOnlyMode && (WiFi.status() == WL_CONNECTED || (long)(millis() - nextWifiRetryMillis) >= 0))
   {
     nextWifiRetryMillis = millis() + 60000;
     wifiMulti.run();

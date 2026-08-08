@@ -65,6 +65,11 @@ public:
     String localIp;
     String ssid;
     String apSsid;
+    String apIp;
+
+    // true once no configured WiFi was found at boot - the device commits to Access Point
+    // only mode and stops retrying, see httpServerSetup()/httpServerLoop()
+    bool apOnlyMode = false;
 
     struct tstKey keys[NBRKEYS];
 
