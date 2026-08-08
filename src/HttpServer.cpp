@@ -419,8 +419,17 @@ void httpServerSetup(void)
 
 void httpServerLoop(void)
 {
-  // connect to strongest wifi, and reconnect
-  wifiMulti.run();
+  // connect to strongest wifi, and reconnect.
+  // wifiMulti.run() returns immediately while connected, but while disconnected it blocks for
+  // several seconds (WiFi scan + a connect attempt per configured network, see ESP8266WiFiMulti.cpp) -
+  // calling it every loop() iteration would then stall everything else (force sampling, OLED, HTTP)
+  // almost permanently, so retries are throttled while there is no connection.
+  static unsigned long nextWifiRetryMillis = 0;
+  if (WiFi.status() == WL_CONNECTED || (long)(millis() - nextWifiRetryMillis) >= 0)
+  {
+    nextWifiRetryMillis = millis() + 60000;
+    wifiMulti.run();
+  }
 
   server.handleClient();
 
