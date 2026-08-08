@@ -57,12 +57,14 @@ void clAssembly::setupDevice()
         cfg.scanNetworks = doc["SCANNETWORKS"] | false;
         cfg.scale = doc["SCALE"] | 1.0f;
         cfg.offset = doc["OFFSET"] | 0L;
+        cfg.taraCalibrateKg = doc["TARA_CALIBRATE_KG"] | 1.0f;
 
 
         Serial.println(String("Assembly.setupDevice --> deviceid: ") + deviceId);
         Serial.println(String("Assembly.setupDevice --> accesspoint_enable: ") + cfg.accessPointEnabled);
         Serial.println(String("Assembly.setupDevice --> scanNetworks: ") + cfg.scanNetworks);
         Serial.println(String("Assembly.setupDevice --> scale: ") + cfg.scale + " offset: " + cfg.offset);
+        Serial.println(String("Assembly.setupDevice --> taraCalibrateKg: ") + cfg.taraCalibrateKg);
         file.close(); // Close the file again
     }
     else
@@ -73,6 +75,7 @@ void clAssembly::setupDevice()
         cfg.scanNetworks = false;
         cfg.scale = 1.0f;
         cfg.offset = 0L;
+        cfg.taraCalibrateKg = 1.0f;
     }
 }
 
@@ -87,6 +90,7 @@ void clAssembly::saveConfig()
     doc["SCANNETWORKS"] = cfg.scanNetworks;
     doc["SCALE"] = cfg.scale;
     doc["OFFSET"] = cfg.offset;
+    doc["TARA_CALIBRATE_KG"] = cfg.taraCalibrateKg;
 
     File file = LittleFS.open(filename, "w");
     if (file)

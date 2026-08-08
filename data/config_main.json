@@ -3,5 +3,6 @@
     "ACCESSPOINT": true,
     "SCANNETWORKS": false,
     "SCALE": 1.0,
-    "OFFSET": 0.0
+    "OFFSET": 0.0,
+    "TARA_CALIBRATE_KG" : 1.0
 }

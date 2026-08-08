@@ -71,7 +71,7 @@ void loop()
             }
             else if (Assembly.state == StateCalibrate && Assembly.keys[1].pressed)
             {
-                Force.calibrate(1.0f * EARTH_GRAVITY_MPS2); // calibrate against a 1kg reference weight
+                Force.calibrate(Assembly.cfg.taraCalibrateKg * EARTH_GRAVITY_MPS2); // calibrate against the configured reference weight
                 Assembly.state = StateMeasure;
             }
             else if (Assembly.state == StateReboot)
