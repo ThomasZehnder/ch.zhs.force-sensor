@@ -221,7 +221,8 @@ void oledLoop()
         display.drawString(0, 0 + Y_OFFSET, "Place " + calibrateKg + " on sensor!");
 
         display.setFont(ArialMT_Plain_16);
-        display.drawString(0, 0 + Y_OFFSET + 14, "CALIBRATE " + calibrateKg + " ...");
+        display.drawString(0, 0 + Y_OFFSET + 14, "CALIBRATE: ");
+        display.drawString(0, 0 + Y_OFFSET + 28, calibrateKg + " ...");
     }
     else if (Assembly.state == StateReboot)
     {
